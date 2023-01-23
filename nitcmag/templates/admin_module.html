@@ -34,13 +34,14 @@
   <nav id="menu" class="main-nav" role="navigation">
     <ul class="main-menu">
       <li><a href="{% url "magazine:admin_module" %}">Home</a></li>
-      <li class="has-submenu"><a href="#section2">Manage Hostels</a>
+      <li class="has-submenu"><a href="#section2">Articles</a>
         <ul class="sub-menu">
-          <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Appoint Hostel Manager</a></li>
-          <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Remove Hostel Manager</a></li>
+          <li><a href="{% url "magazine:view_assigned_articles" %}" rel="sponsored" class="external">View Assigned Articles</a></li>
+          <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">View Pending Articles</a></li>
+          <li><a href="{% url "magazine:view_reviewed_articles" %}" rel="sponsored" class="external">View Reviewed Articles</a></li>
         </ul>
       </li>
-      <li class="has-submenu"><a href="#section2">Manage Mess</a>
+      <!-- <li class="has-submenu"><a href="#section2">Manage Mess</a>
         <ul class="sub-menu2">
           <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Appoint Mess Manager</a></li>
           <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Remove Mess Manager</a></li>
@@ -51,7 +52,7 @@
           <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">View Student Records</a></li>
           <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Expel Student</a></li>
         </ul>
-      </li>
+      </li> -->
       <li class="has-submenu"><a href="#section2">Admininstrator</a>
         <ul class="sub-menu3">
           <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">Change Password</a></li>
@@ -70,8 +71,8 @@
 
       <div class="video-overlay header-text">
           <div class="caption">
-              <h6>NITC Hostel and Mess Management System</h6>
-              <h2><em>Hostel</em>Desk</h2>
+              <h6>NITC Magazine Committee System</h6>
+              <h2><em>NITC</em> MCS</h2>
           </div>
       </div>
   </section>
