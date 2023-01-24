@@ -53,6 +53,12 @@ def admin_module(request):
             return redirect("../login")
     else:
         return redirect("../login")
+
+def appoint_reviewer(request):
+    return render(request)
+
+def remove_reviewer(request):
+    return render(request)
     
 
 def view_assigned_articles(request):
@@ -213,8 +219,6 @@ def add_new_post(title,author,content):
     cursor.execute(query)
 
 
-
-
 def get_reviewer_name(r_id):
     cursor =  connection.cursor()
 
@@ -226,6 +230,3 @@ def get_reviewer_name(r_id):
 
 
     return y[0][1]
-
-
-
