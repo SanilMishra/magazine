@@ -16,5 +16,7 @@ urlpatterns = [
     path('reviewer_module/',views.reviewer_module,name="reviewer_module"),
     path('reviewer_module/reviewed_articles_reviewer/',views.reviewed_articles_reviewer,name="reviewed_article_reviewer"),
     path('reviewer_module/pending_articles_reviewer',views.pending_articles_reviewer,name="pending_articles_reviewer"),
-    path('view_magazine/',views.view_magazine,name="view_magazine")
+    path('view_magazine/',views.view_magazine,name="view_magazine"),
+    path('view_magazine/viewer_article/',views.viewer_article,name="view_magazine")
+    
 ]
