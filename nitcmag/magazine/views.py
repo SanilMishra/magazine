@@ -53,6 +53,12 @@ def admin_module(request):
             return redirect("../login")
     else:
         return redirect("../login")
+
+def appoint_reviewer(request):
+    return render(request)
+
+def remove_reviewer(request):
+    return render(request)
     
 
 def view_assigned_articles(request):
@@ -262,14 +268,12 @@ def add_new_post(title,author,content):
     query="select * from article"
     cursor.execute(query)
     y=cursor.fetchall()
-    a_id=len(y)+1;
+    a_id=len(y)+1
 
 
     query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
     query=query.format(a_id,title,author,content)
     cursor.execute(query)
-
-
 
 
 def get_reviewer_name(r_id):
@@ -283,6 +287,3 @@ def get_reviewer_name(r_id):
 
 
     return y[0][1]
-
-
-
