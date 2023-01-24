@@ -230,8 +230,3 @@ def get_reviewer_name(r_id):
 
 
     return y[0][1]
-
-# hi
-#hello
-
-#hi hello
