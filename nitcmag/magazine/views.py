@@ -138,6 +138,63 @@ def pending_articles_reviewer(request):
 
 "***************************************************************************************************************"
 
+def published_article(request, article_id):
+    cursor = connection.cursor()
+    query = "select title,author,content,name from article, reviewer where article_id = {} and article.reviewer_id = reviewer.reviewer_id;"
+    query = query.format(article_id)
+    cursor.execute(query)
+    article = cursor.fetchall()[0]
+    details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'reviewer' : article[3]}
+    return render(request,"published_article.html",details)
+
+
+def admin_article(request,article_id):
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1] == 1:
+            cursor = connection.cursor()
+            query = "select title,author,content,status,reviewer,rating from article where article_id = {};"
+            query = query.format(article_id)
+            cursor.execute(query)
+            article = cursor.fetchall()[0]
+            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
+            if details['status'] == 1 :
+                query = "select name from reviewer;"
+                cursor.execute(query)
+                reviewers = cursor.fetchall()
+                details['reviewers' : reviewers]
+            else:
+                details['reviewer'] = article[4]
+                if details['status'] >= 3:
+                    details['rating'] = article[5]
+            return render(request,"admin_article.html",details)
+        else:
+            return redirect("../login.html")
+    else:
+        return redirect("../login.html")
+
+
+def reviewer_artcile(request,article_id):
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1] == 2:
+            cursor = connection.cursor()
+            query = "select title,author,content,status,rating from article, reviewer where article_id = {};"
+            query = query.format(article_id)
+            cursor.execute(query)
+            article = cursor.fetchall()[0]
+            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3]}
+            if details['status'] >= 3:
+                details['rating'] = article[4]
+            return render(request,"reviewer_article.html",details)
+        else:
+            return redirect("../login.html")
+    else:
+        return redirect("../login.html")
+
+
+"***************************************************************************************************************"
+
 def view_magazine(request):
     return render(request,'magazine.html')
 
