@@ -211,7 +211,7 @@ def add_new_post(title,author,content):
     query="select * from article"
     cursor.execute(query)
     y=cursor.fetchall()
-    a_id=len(y)+1;
+    a_id=len(y)+1
 
 
     query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
@@ -231,8 +231,5 @@ def get_reviewer_name(r_id):
 
     return y[0][1]
 
-<<<<<<< HEAD
 # hi
-=======
 #hello
->>>>>>> e7cfa6666f724e652a2cd0cbfb21dd0f99adc7a9
