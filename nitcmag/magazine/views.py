@@ -231,4 +231,8 @@ def get_reviewer_name(r_id):
 
     return y[0][1]
 
+<<<<<<< HEAD
 # hi
+=======
+#hello
+>>>>>>> e7cfa6666f724e652a2cd0cbfb21dd0f99adc7a9
