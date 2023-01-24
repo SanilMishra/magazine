@@ -134,3 +134,98 @@ def pending_articles_reviewer(request):
 
 def view_magazine(request):
     return render(request,'magazine.html')
+
+def send_for_review(a_id,r_id):
+    cursor =  connection.cursor()
+
+
+    query="update article set reviewer_id={},status=2 where article_id={}"
+    query=query.format(r_id,a_id)
+    cursor.execute(query)
+
+
+def give_rating(a_id,rating):
+    cursor =  connection.cursor()
+
+
+    if(rating>10):
+        return -1
+    else:
+        query="update article set rating={},status=3 where article_id={}"
+        query=query.format(rating,a_id)
+        cursor.execute(query)
+
+
+def publish(a_id):
+    cursor =  connection.cursor()
+
+
+    query="update article set status=4 where article_id={}"
+    query=query.format(a_id)
+    cursor.execute(query)
+
+
+def get_articles_list(status):
+    cursor =  connection.cursor()
+
+
+    query="select * from article where status={}"
+    query=query.format(status)
+    cursor.execute(query)
+    y=cursor.fetchall()
+    return y
+
+
+def get_article(a_id):
+    cursor =  connection.cursor()
+
+
+    query="select * from article where article_id={}"
+    query=query.format(a_id)
+    cursor.execute(query)
+    y=cursor.fetchall()
+    return y
+
+
+def get_reviewer_articles(r_id,status):
+    cursor =  connection.cursor()
+
+
+    query="select * from article where status={},reviewer_id={}"
+    query=query.format(status,r_id)
+    cursor.execute(query)
+    y=cursor.fetchall()
+    return y
+
+
+def add_new_post(title,author,content):
+    cursor =  connection.cursor()
+
+
+    query="select * from article"
+    cursor.execute(query)
+    y=cursor.fetchall()
+    a_id=len(y)+1;
+
+
+    query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
+    query=query.format(a_id,title,author,content)
+    cursor.execute(query)
+
+
+
+
+def get_reviewer_name(r_id):
+    cursor =  connection.cursor()
+
+
+    query="select * from reviewer where reviewer_id={}"
+    query=query.format(r_id)
+    cursor.execute(query)
+    y=cursor.fetchall()
+
+
+    return y[0][1]
+
+
+
