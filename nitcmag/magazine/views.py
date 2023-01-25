@@ -42,6 +42,34 @@ def login(request):
         return redirect_modules(role)
     return render(request,"login.html")
 
+def change_password(request):
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if request.method=="POST":
+            entered_details = request.POST
+            for i in entered_details.values():
+                if i=='':
+                    return render(request, "change_password.html",{'error':'Kindly enter all values.'})
+            if (entered_details['n_pass'] != entered_details['re_n_pass']):
+                return render(request, "change_password.html",{'error':"Passwords doesn't match."})
+            if (entered_details['c_pass'] == entered_details['re_n_pass'] == entered_details['n_pass']):
+                return render(request, "change_password.html",{'error':"New password cannot be same as old password."})
+            get_password_query = "select password from magazine_login_cred where u_id = '{}'"
+            get_password_query = get_password_query.format(user_details[0])
+            cursor = connection.cursor()
+            cursor.execute(get_password_query)
+            y = cursor.fetchall()
+            if y[0][0] != entered_details['c_pass']:
+                return render(request, "change_password.html",{'error':"Password incorrect."})
+            else:
+                change_password_query = "update magazine_login_cred set password='{}' where u_id='{}'"
+                change_password_query = change_password_query.format(entered_details['n_pass'],user_details[0])
+                cursor.execute(change_password_query)
+                return render(request, "change_password_1.html")
+        return render(request,'change_password.html')
+    else:
+        return redirect("../login")
+
 "***************************************************************************************************************"
 
 def admin_module(request):
@@ -55,17 +83,17 @@ def admin_module(request):
         return redirect("../login")
 
 def appoint_reviewer(request):
-    return render(request)
+    return render(request,"admin_dash_base.html")
 
 def remove_reviewer(request):
-    return render(request)
+    return render(request,"admin_dash_base.html")
     
 
 def view_assigned_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"base.html")
+            return render(request,"admin_dash_base.html")
         else:
             return redirect("../login")
     else:
@@ -75,7 +103,7 @@ def send_for_review(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"base.html")
+            return render(request,"admin_dash_base.html")
         else:
             return redirect("../login")
     else:
@@ -85,7 +113,7 @@ def view_pending_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"base.html")
+            return render(request,"admin_dash_base.html")
         else:
             return redirect("../login")
     else:
@@ -96,7 +124,7 @@ def view_reviewed_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"base.html")
+            return render(request,"admin_dash_base.html")
         else:
             return redirect("../login")
     else:
@@ -108,7 +136,7 @@ def reviewer_module(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"base.html")
+            return render(request,"reviewer_module.html")
         else:
             return redirect("../login")
     else:
@@ -118,7 +146,7 @@ def reviewed_articles_reviewer(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"base.html")
+            return render(request,"reviewer_dash_base.html")
         else:
             return redirect("../login")
     else:
@@ -129,7 +157,7 @@ def pending_articles_reviewer(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"base.html")
+            return render(request,"reviewer_dash_base.html")
         else:
             return redirect("../login")
     else:

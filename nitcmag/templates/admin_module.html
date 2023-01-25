@@ -1,26 +1,13 @@
-{% extends 'dash_base.html' %}
+{% extends 'admin_dash_base.html' %}
 
 {% block title %}Admin Module{% endblock %}
 
-{% block color_title %}Admin{% endblock %}
-{% block white_title %}Module{% endblock %}
-
-{% block content %}
-  <li class="has-submenu"><a href="#section2">Articles</a>
-    <ul class="sub-menu">
-      <li><a href="{% url "magazine:view_assigned_articles" %}" rel="sponsored" class="external">View Unassigned Articles</a></li>
-      <li><a href="{% url "magazine:view_pending_articles" %}" rel="sponsored" class="external">View Pending Articles</a></li>
-      <li><a href="{% url "magazine:view_reviewed_articles" %}" rel="sponsored" class="external">View Reviewed Articles</a></li>
-    </ul>
-  </li>
-  <li class="has-submenu"><a href="#section2">Reviewers</a>
-    <ul class="sub-menu2">
-      <li><a href="{% url "magazine:appoint_reviewer" %}" rel="sponsored" class="external">Appoint Reviewers</a></li>
-      <li><a href="{% url "magazine:remove_reviewer" %}" rel="sponsored" class="external">Remove Reviewers</a></li>
-    </ul>
-  </li>
+{% block body %}
+  <div class="caption">
+    <h6>NITC Magazine Committee System</h6>
+    <h2><em>NITC</em> MCS</h2>
+  </div>
 {% endblock %}
       
-{% block name %}Administrator{% endblock %}
 
  
