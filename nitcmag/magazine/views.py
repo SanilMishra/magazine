@@ -89,11 +89,21 @@ def remove_reviewer(request):
     return render(request,"admin_dash_base.html")
     
 
-def view_assigned_articles(request):
+def view_unassigned_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            cursor = connection.cursor()
+            query = "select title,author,content,status from magazine_article;"
+            cursor.execute(query)
+            fetched_data = cursor.fetchall()
+            articles = []
+            for i in fetched_data:
+                details = {'title' : i[0], 'author' : i[1], 'content' : i[2], 'status': i[3]}
+                articles.append(details)
+            # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
+            print(articles)
+            return render(request,"view_unassigned_articles.html",{"articles":articles})
         else:
             return redirect("../login")
     else:
