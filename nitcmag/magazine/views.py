@@ -149,6 +149,19 @@ def view_reviewed_articles(request):
     else:
         return redirect("../login")
 
+def display_article_admin(request, article_id):
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1] == 1:
+            data = get_article(article_id)
+            article = {"article_id":data[0], "title":data[1], "author":data[2], "content":data[3], "reviewer_id":data[4], "reviewer_name":"coming soon", "rating":data[6]}
+            return render(request,"display_article_admin.html", {"article":article})
+        else:
+            return redirect("../login")
+    else:
+        return redirect("../login")
+
+
 "***************************************************************************************************************"
 
 def reviewer_module(request):
@@ -182,6 +195,16 @@ def pending_articles_reviewer(request):
     else:
         return redirect("../login")
 
+
+"***************************************************************************************************************"
+
+def get_article(a_id):
+    cursor =  connection.cursor()
+    query="select * from magazine_article where article_id={}"
+    query=query.format(a_id)
+    cursor.execute(query)
+    y=cursor.fetchone()
+    return y
 
 "***************************************************************************************************************"
 
@@ -286,15 +309,7 @@ def get_articles_list(status):
     return y
 
 
-def get_article(a_id):
-    cursor =  connection.cursor()
 
-
-    query="select * from article where article_id={}"
-    query=query.format(a_id)
-    cursor.execute(query)
-    y=cursor.fetchall()
-    return y
 
 
 def get_reviewer_articles(r_id,status):

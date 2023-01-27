@@ -1,0 +1,28 @@
+{% extends 'admin_dash_base.html' %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+
+{% block body %}
+    <table class="caption" style="color:white;">
+        <tbody>
+            <tr>
+                <td>
+                    <ul >
+                        <li>{{ article.title }}</li>
+                        <li>{{ article.author }}</li>
+                        <li>{{ article.content }}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul >
+                        <li>{{ article.rating }}</li>
+                        <li>{{ article.reviewer_id }}</li>
+                        <li>{{ article.reviewer_name }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

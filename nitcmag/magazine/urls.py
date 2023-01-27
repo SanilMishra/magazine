@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin_module/send_for_review/',views.send_for_review,name="send_for_review"),
     path('admin_module/view_pending_articles/',views.view_pending_articles,name="view_pending_articles"),
     path('admin_module/view_reviewed_articles/',views.view_reviewed_articles,name="view_reviewed_articles"),
+    path('admin_module/view_reviewed_articles/<int:article_id>',views.display_article_admin,name="display_article_admin"),
     path('reviewer_module/',views.reviewer_module,name="reviewer_module"),
     path('reviewer_module/reviewed_articles_reviewer/',views.reviewed_articles_reviewer,name="reviewed_articles_reviewer"),
     path('reviewer_module/pending_articles_reviewer',views.pending_articles_reviewer,name="pending_articles_reviewer"),
