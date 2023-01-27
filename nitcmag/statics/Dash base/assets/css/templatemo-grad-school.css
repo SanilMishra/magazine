@@ -457,7 +457,7 @@ a.menu-link { display: none; }
 
 .video-overlay {
     position: absolute;
-    background-color: rgba(52, 58, 64, 0.80);
+    /* background-color: rgba(52, 58, 64, 0.80); */
     top: 0;
     left: 0;
     bottom: 6px;
