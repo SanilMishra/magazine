@@ -94,12 +94,12 @@ def view_unassigned_articles(request):
         user_details = request.session['user']
         if user_details[1] == 1:
             cursor = connection.cursor()
-            query = "select title,author,content,status from magazine_article;"
+            query = "select article_id,title,author from magazine_article where status=1;"
             cursor.execute(query)
             fetched_data = cursor.fetchall()
             articles = []
             for i in fetched_data:
-                details = {'title' : i[0], 'author' : i[1], 'content' : i[2], 'status': i[3]}
+                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2]}
                 articles.append(details)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             print(articles)
@@ -134,7 +134,16 @@ def view_reviewed_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            cursor = connection.cursor()
+            query = "select article_id,title,author,reviewer_id,rating from magazine_article where status=3;"
+            cursor.execute(query)
+            fetched_data = cursor.fetchall()
+            articles = []
+            for i in fetched_data:
+                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3], 'rating': i[4]}
+                articles.append(details)
+            # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
+            return render(request,"view_reviewed_articles.html",{"articles":articles})
         else:
             return redirect("../login")
     else:

@@ -1,0 +1,56 @@
+{% extends 'admin_dash_base.html' %}
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                <tr>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.content }}</td>
+                    <td>{{ article.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html> -->
+
+
+
+{% block title %}Reviewed Articles{% endblock %}
+
+{% block body %}
+    <table class="caption">
+        <thead>
+            <tr style="color: rgb(225, 225, 225);">
+                <th>Article ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Reviewer ID</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr style="color: rgb(144, 144, 144);">
+                <td>{{article.article_id }}</td>
+                <td><a href="#">{{article.title }}</a></td>
+                <td>{{ article.author }}</td>
+                <td>{{ article.reviewer_id }}</td>
+                <td>{{ article.rating }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

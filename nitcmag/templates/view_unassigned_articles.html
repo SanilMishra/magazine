@@ -1,20 +1,24 @@
+{% extends 'admin_dash_base.html' %}
 
+{% block title %}Unassigned Articles{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <body>
-        <ul>
+{% block body %}
+    <table class="caption">
+        <thead>
+            <tr style="color: white;">
+                <th>Article ID</th>
+                <th>Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for article in articles %}
-            <li>
-                <ul>
-                    <li>{{ article.title }}</li>
-                    <li>{{ article.author }}</li>
-                    <li>{{ article.content }}</li>
-                    <li>{{ article.status }}</li>
-                </ul>
-            </li>
-                
-            {% endfor %}    
-        </ul>
-    </body>
-</html>
+            <tr style="color: white;">
+                <td>{{ article.article_id }}</td>
+                <td><a href="#">{{article.title }}</a></td>
+                <td>{{ article.author }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
