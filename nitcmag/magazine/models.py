@@ -19,7 +19,7 @@ class Article(models.Model):
     Title = models.CharField(max_length = 100)
     Author = models.CharField(max_length = 40)
     Content = models.CharField(max_length = 2000)
-    Reviewer_Id = models.CharField(max_length=9, validators=[MinLengthValidator(9)])
+    Reviewer_Id = models.ForeignKey(Reviewer,to_field="Reviewer_Id", on_delete=models.CASCADE)
     Status = models.IntegerField()
     Rating = models.IntegerField(default=None)
 
