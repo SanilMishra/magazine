@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db import connection
+from django.db import IntegrityError
 
 
 # Create your views here.
@@ -83,10 +84,59 @@ def admin_module(request):
         return redirect("../login")
 
 def appoint_reviewer(request):
-    return render(request,"admin_dash_base.html")
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1]==1:
+            if request.method=="POST":
+                entered_data = request.POST
+                if len(entered_data.keys())<4:
+                    return render(request, "admin_appoint_reviewer.html",{'error':'Kindly enter all values.'})
+                insert_query = "insert into magazine_reviewer values ('{}','{}')"
+                reg_login_query = "insert into magazine_login_cred values ('{}','{}',2)"
+                insert_query = insert_query.format(entered_data['username'],entered_data['name'])
+                reg_login_query = reg_login_query.format(entered_data['username'],entered_data['password'])
+                cursor = connection.cursor()
+                try:
+                    cursor.execute(reg_login_query)
+                    cursor.execute(insert_query)
+                except IntegrityError :
+                    return  render(request, "admin_appoint_reviewer.html",{'error':'User already exists'})
+                return render(request,"admin_appoint_reviewer_1.html")
+            return render(request,"admin_appoint_reviewer.html")
+        else:
+            return redirect("../../login")
+    else:
+        return redirect("../../login")
+    
 
 def remove_reviewer(request):
-    return render(request,"admin_dash_base.html")
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1]==1:
+            if request.method=="POST":
+                entered_data = request.POST
+                print(entered_data)
+                if entered_data['username']=='':
+                    return render(request, "admin_remove_reviewer.html",{'error':'Kindly enter a Reviewer ID.'})
+                select_query = "select * from magazine_reviewer where reviewer_id = '{}'"
+                select_query = select_query.format(entered_data['username'])
+                remove_query = "delete from magazine_reviewer where reviewer_id = '{}'"
+                remove_login_query = "delete from magazine_login_cred where u_id = '{}'"
+                remove_query = remove_query.format(entered_data['username'])
+                remove_login_query = remove_login_query.format(entered_data['username'])
+                cursor = connection.cursor()
+                cursor.execute(select_query)
+                y = cursor.fetchall()
+                if len(y)==0:
+                    return render(request, "admin_remove_reviewer.html",{'error':"User doesn't exist."})
+                cursor.execute(remove_query)
+                cursor.execute(remove_login_query)
+                return render(request, "admin_remove_reviewer_1.html")
+            return render(request,"admin_remove_reviewer.html")
+        else:
+            return redirect("../../login")
+    else:
+        return redirect("../../login")
     
 
 def view_unassigned_articles(request):
@@ -105,9 +155,9 @@ def view_unassigned_articles(request):
             
             return render(request,"admin_unassigned_articles_list.html",{"articles":articles})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def send_for_review(request):
     if request.session.has_key('user'):
@@ -125,9 +175,9 @@ def view_pending_articles(request):
         if user_details[1] == 1:
             return render(request,"admin_pending_articles_list.html")
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def view_reviewed_articles(request):
     # select articles from this, give publish option

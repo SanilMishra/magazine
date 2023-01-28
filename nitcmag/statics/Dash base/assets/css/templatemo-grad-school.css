@@ -13,6 +13,142 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+.loginhere {
+  text-align: center;
+  color: #888;
+  margin-top: 63px; }
+
+.loginhere-link {
+  color: #25d2f5;
+  text-decoration: none; }
+  .loginhere-link:hover {
+    text-decoration: underline; }
+
+.form {
+  background-color: rgba(65, 72, 77, 0.85);
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 29.6875em;
+  padding: 20px 50px 20px 50px;
+  width: 500px;
+  margin-top: 100px;
+}
+
+.title {
+  color: #fff;
+  font-style:normal;
+  text-transform: uppercase;
+  font-size: 35px;
+  font-weight: 800;
+  margin-top: 30px;
+  text-align: center;
+}
+optgroup { font-size:13px; }
+
+.title em {
+  font-style: normal;
+  color: #25d2f5;
+  font-weight: 800;
+}
+
+.input-container {
+  height: 50px;
+  position: relative;
+  width: 100%;
+}
+
+.ic1 {
+  margin-top: 20px;
+}
+
+.ic2 {
+  margin-top: 20px;
+}
+
+.ic3 {
+    margin-top: 20px;
+    color: #888;
+}
+
+.input {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+}
+
+.cut {
+  background-color: rgba(65, 72, 77, 0.85);
+  border-radius: 10px;
+  height: 20px;
+  left: 20px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 76px;
+}
+
+.cut-short {
+  width: 80px;
+}
+
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+  transform: translateY(8px);
+  text-align: center;
+}
+
+.placeholder {
+  color: #888;
+  left: 20px;
+  font-size: 14px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 100%;
+  transition: transform 200ms, color 200ms;
+  top: 20px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+  transform: translateY(-30px) translateX(10px) scale(0.75);
+  text-align: center;
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: #25d2f5;
+}
+
+.input:focus ~ .placeholder {
+  /* color: #dc2f55; */
+  color: #25d2f5;
+}
+
+.submit {
+  background-color: #25d2f5;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  text-align: center;
+  width: 100%;
+}
+.submit:hover{
+  background-color: #1ea8c4;
+}
 /* Basic */
 
 a {

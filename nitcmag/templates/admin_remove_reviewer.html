@@ -1,0 +1,25 @@
+{% extends 'admin_dash_base.html' %}
+
+{% block title %}Remove Reviewer{% endblock %}
+
+{% block body %}
+
+    <div class="caption">
+      <div class="form" style="height: 21.750em;">
+        <div class="title"><em>Remove</em> Reviewer</div>
+        <p class="error" style="font-size:18px; color:rgb(211, 50, 50)" text-align="center" id="error">
+          {{error}}
+        </p>
+        <form method="POST" class="ahm_form">
+          {% csrf_token %}
+          <div class="input-container ic1">
+            <input name="username" id="usernmae" class="input" type="text" placeholder=" " />
+            <div class="cut"></div>
+            <label for="usernmae" class="placeholder">Reviewer Id</label>
+          </div>
+          <button type="submit" class="submit">Submit</button>
+        </form> 
+      </div>
+    </div>
+
+{% endblock %}
