@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db import connection
+<<<<<<< HEAD
 from django.db import IntegrityError
+=======
+from django.http import HttpResponseRedirect
+>>>>>>> 6c6d3891ee793937906d08e505d1be687e247187
 
 
 # Create your views here.
@@ -143,41 +147,67 @@ def view_unassigned_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            cursor = connection.cursor()
-            query = "select article_id,title,author from magazine_article where status=1;"
-            cursor.execute(query)
-            fetched_data = cursor.fetchall()
+            fetched_data=get_articles_list(1)
             articles = []
+            reviewers = get_list_of_reviewers()
             for i in fetched_data:
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2]}
                 articles.append(details)
-            # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             
+<<<<<<< HEAD
             return render(request,"admin_unassigned_articles_list.html",{"articles":articles})
         else:
             return redirect("../../login")
     else:
         return redirect("../../login")
+=======
+            if request.method=="POST":
+                to_be_sent = request.POST
+                my_list=list(to_be_sent.values())[1:]
+                for i in my_list:
+                    stri=i
+                    print(stri)
+                    j=0
+                    r_id=""
+                    a_id=""
+                    while(j<len(stri) and stri[j]!='*'):
+                        r_id=r_id+stri[j]
+                        j=j+1
+                    r_id=r_id
+                    j=j+1
+                    while(j<len(stri)):
+                        a_id=a_id+stri[j]
+                        j=j+1
+                    a_id=a_id
+                    num=int(a_id)
+                    send_for_review(num,r_id)
+                    return HttpResponseRedirect("")
+>>>>>>> 6c6d3891ee793937906d08e505d1be687e247187
 
-def send_for_review(request):
-    if request.session.has_key('user'):
-        user_details = request.session['user']
-        if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            return render(request,"admin_unassigned_articles_list.html",{"articles":[articles,reviewers]})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def view_pending_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_pending_articles_list.html")
+            fetched_data=get_articles_list(2)
+            print(fetched_data)
+            articles = []
+            for i in fetched_data:
+                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2],'reviewer':get_reviewer_name(i[6])}
+                articles.append(details)
+
+            return render(request,"admin_pending_articles_list.html",{"articles":articles})
         else:
             return redirect("../../login")
     else:
         return redirect("../../login")
+
+
 
 def view_reviewed_articles(request):
     # select articles from this, give publish option
@@ -254,6 +284,15 @@ def pending_articles_reviewer(request):
 def view_magazine(request):
     return render(request,'magazine.html',{'articles':get_articles_list(4)})
 
+def create_article(request):
+    if request.method=="POST":
+        info=request.POST
+        title=info["title"]
+        content=info["content"]
+        author=info["author"]
+        add_new_post(title,author,content)
+
+    return render(request,"create_article.html")
 
 "*********************************KD_FUNCTIONS******************************************************************"
 
@@ -283,6 +322,68 @@ def get_articles_list(status):
     cursor.execute(query)
     y=cursor.fetchall()
     return y
+
+def get_list_of_reviewers():
+    cursor =  connection.cursor()
+
+
+    query="select * from magazine_reviewer where reviewer_id!='-1'"
+    cursor.execute(query)
+    y=cursor.fetchall()
+
+    return y
+
+def send_for_review(a_id,r_id):
+    cursor =  connection.cursor()
+
+
+    query="update magazine_article set reviewer_id={},status=2 where article_id={}"
+    query=query.format(r_id,a_id)
+    cursor.execute(query)
+
+def send_for_review(a_id,r_id):
+    cursor =  connection.cursor()
+
+
+    query="update magazine_article set reviewer_id='{}',status=2 where article_id={}"
+    query=query.format(r_id,a_id)
+    cursor.execute(query)
+
+def get_reviewer_name(r_id):
+    cursor =  connection.cursor()
+
+
+    query="select * from magazine_reviewer where reviewer_id='{}'"
+    query=query.format(r_id)
+    cursor.execute(query)
+    y=cursor.fetchall()
+
+
+    return y[0][1]
+
+def add_new_post(title,author,content):
+    cursor =  connection.cursor()
+
+
+    query="select max(article_id) from magazine_article"
+    cursor.execute(query)
+    y=cursor.fetchall()
+    a_id=y[0][0]+1
+
+
+    query="INSERT INTO magazine_article  VALUES ('{}','{}','{}','{}',1,-1,'-1');"
+    print(a_id,title,author,content)
+    query=query.format(a_id,title,author,content)
+    cursor.execute(query)
+
+def atoi(stri):
+    j=0
+    num=0
+    while(j<len(stri)):
+        num=num*10+int(stri[j])
+        j=j+1
+    return num
+
 
 "***************************************************************************************************************"
 
@@ -345,15 +446,6 @@ def reviewer_artcile(request,article_id):
 
 
 
-def send_for_review(a_id,r_id):
-    cursor =  connection.cursor()
-
-
-    query="update article set reviewer_id={},status=2 where article_id={}"
-    query=query.format(r_id,a_id)
-    cursor.execute(query)
-
-
 def give_rating(a_id,rating):
     cursor =  connection.cursor()
 
@@ -364,15 +456,6 @@ def give_rating(a_id,rating):
         query="update article set rating={},status=3 where article_id={}"
         query=query.format(rating,a_id)
         cursor.execute(query)
-
-
-
-
-
-
-
-
-
 
 
 def get_reviewer_articles(r_id,status):
@@ -386,29 +469,7 @@ def get_reviewer_articles(r_id,status):
     return y
 
 
-def add_new_post(title,author,content):
-    cursor =  connection.cursor()
 
 
-    query="select * from article"
-    cursor.execute(query)
-    y=cursor.fetchall()
-    a_id=len(y)+1
 
 
-    query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
-    query=query.format(a_id,title,author,content)
-    cursor.execute(query)
-
-
-def get_reviewer_name(r_id):
-    cursor =  connection.cursor()
-
-
-    query="select * from reviewer where reviewer_id={}"
-    query=query.format(r_id)
-    cursor.execute(query)
-    y=cursor.fetchall()
-
-
-    return y[0][1]

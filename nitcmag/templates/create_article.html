@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>CREATE POST</h1>
+
+<form method="POST">
+    {% csrf_token %}
+  <label for="title">Title:</label><br>
+  <input type="text" id="title" name="title" placeholder="enter title here"><br>
+  <p></p>
+  <p></p>
+  <label for="content">Content:</label><br>
+  <textarea name= "content" rows="10" cols="70" placeholder="enter your content here"></textarea> <br>
+  <p></p>
+  <p></p>
+  <p></p><br>
+  <label for="author">Author:</label><br>
+  <input type="text" id="author" name="author" placeholder="enter author name here"><br>
+  <p></p><br>
+  <p></p>
+  <input type="submit" value="Submit">
+</form> 
+
+
+</body>
+</html>
+
