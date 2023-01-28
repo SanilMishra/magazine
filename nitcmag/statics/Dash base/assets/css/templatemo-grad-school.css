@@ -36,7 +36,7 @@ p {
     line-height: 22px;
 }
 
-h1 {
+.article-list-heading{
   position: relative;
   top: 3.25em;
   text-align: center;

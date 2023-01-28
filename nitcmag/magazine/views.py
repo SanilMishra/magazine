@@ -102,7 +102,7 @@ def view_unassigned_articles(request):
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2]}
                 articles.append(details)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
-            print(articles)
+            
             return render(request,"admin_unassigned_articles_list.html",{"articles":articles})
         else:
             return redirect("../login")
@@ -142,7 +142,13 @@ def view_reviewed_articles(request):
             for i in fetched_data:
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3], 'rating': i[4]}
                 articles.append(details)
+            if request.method=="POST":
+                to_be_published = request.POST
+                article_id_list=list(to_be_published.values())[1:]
+                for i in article_id_list:
+                    publish(i)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
+            # revert()
             return render(request,"admin_reviewed_articles_list.html",{"articles":articles})
         else:
             return redirect("../../login")
@@ -195,8 +201,11 @@ def pending_articles_reviewer(request):
     else:
         return redirect("../login")
 
+def view_magazine(request):
+    return render(request,'magazine.html',{'articles':get_articles_list(4)})
 
-"***************************************************************************************************************"
+
+"*********************************KD_FUNCTIONS******************************************************************"
 
 def get_article(a_id):
     cursor =  connection.cursor()
@@ -204,6 +213,25 @@ def get_article(a_id):
     query=query.format(a_id)
     cursor.execute(query)
     y=cursor.fetchone()
+    return y
+
+def publish(a_id):
+    cursor =  connection.cursor()
+    query="update magazine_article set status=4 where article_id={}"
+    query=query.format(a_id)
+    cursor.execute(query)
+
+def revert():
+    cursor = connection.cursor()
+    query = "update magazine_article set status=3"
+    cursor.execute(query)
+
+def get_articles_list(status):
+    cursor =  connection.cursor()
+    query="select * from magazine_article where status={}"
+    query=query.format(status)
+    cursor.execute(query)
+    y=cursor.fetchall()
     return y
 
 "***************************************************************************************************************"
@@ -265,8 +293,7 @@ def reviewer_artcile(request,article_id):
 
 "***************************************************************************************************************"
 
-def view_magazine(request):
-    return render(request,'magazine.html')
+
 
 def send_for_review(a_id,r_id):
     cursor =  connection.cursor()
@@ -289,24 +316,10 @@ def give_rating(a_id,rating):
         cursor.execute(query)
 
 
-def publish(a_id):
-    cursor =  connection.cursor()
 
 
-    query="update article set status=4 where article_id={}"
-    query=query.format(a_id)
-    cursor.execute(query)
 
 
-def get_articles_list(status):
-    cursor =  connection.cursor()
-
-
-    query="select * from article where status={}"
-    query=query.format(status)
-    cursor.execute(query)
-    y=cursor.fetchall()
-    return y
 
 
 

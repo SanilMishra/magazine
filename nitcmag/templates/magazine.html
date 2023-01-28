@@ -1,2 +1,26 @@
 <h1>Nothing Here</h1>
 <a href="{% url "magazine:home" %}">Home</a>
+
+<table>
+    <thead>
+        <tr style="color: rgb(200, 170, 18);">
+            <th>Article ID</th>
+            <th>Title</th>
+            <th>Author</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+            {% csrf_token %}
+            {% for article in articles %}
+            <tr>
+                <td>{{article.0 }}</td>
+                <td>{{article.1 }}</a></td>
+                <td>{{ article.2 }}</td>
+            </tr>
+            {% endfor %}
+                
+
+        
+    </tbody>
+</table>
