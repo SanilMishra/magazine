@@ -165,7 +165,7 @@ a.menu-link { display: none; }
 }
 
 .main-header {
-    background-color: #343a40;
+    background-color: #0a1a36;
     height: 80px;
     position: fixed;
     z-index: 12;
@@ -229,8 +229,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu {
     position: absolute;
-    width: 185px;
-    background-color: #00d5ff47;
+    width: 120px;
+    background-color: #123f72;
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s;
@@ -238,8 +238,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu2 {
   position: absolute;
-  width: 157px;
-  background-color: #00d5ff47;
+  width: 135px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -247,8 +247,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu3 {
   position: absolute;
-  width: 195px;
-  background-color: #00d5ff47;
+  width: 172px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -256,8 +256,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu4 {
   position: absolute;
-  width: 195px;
-  background-color: #00d5ff47;
+  width: 172px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -285,10 +285,11 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu li {
     display: block;
-    text-align: center;
+    text-align:center;
     line-height: 20px;
     margin-left: 0px;
     margin-bottom: 15px;
+    padding-right: 4px;
     padding-bottom: 15px;
     border-bottom: 1px solid #121b2f;
 }
@@ -1676,7 +1677,7 @@ section.contact form button {
 /* Footer */
 
 footer {
-    background-color: #343a40;
+    background-color: rgba(6, 22, 53, 0.95);
     text-align: center;
 }
 
