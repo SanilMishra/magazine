@@ -103,7 +103,7 @@ def view_unassigned_articles(request):
                 articles.append(details)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             print(articles)
-            return render(request,"view_unassigned_articles.html",{"articles":articles})
+            return render(request,"admin_unassigned_articles_list.html",{"articles":articles})
         else:
             return redirect("../login")
     else:
@@ -123,7 +123,7 @@ def view_pending_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            return render(request,"admin_pending_articles_list.html")
         else:
             return redirect("../login")
     else:
@@ -143,11 +143,11 @@ def view_reviewed_articles(request):
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3], 'rating': i[4]}
                 articles.append(details)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
-            return render(request,"view_reviewed_articles.html",{"articles":articles})
+            return render(request,"admin_reviewed_articles_list.html",{"articles":articles})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def display_article_admin(request, article_id):
     if request.session.has_key('user'):
