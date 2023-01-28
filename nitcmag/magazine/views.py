@@ -223,6 +223,15 @@ def pending_articles_reviewer(request):
 def view_magazine(request):
     return render(request,'magazine.html',{'articles':get_articles_list(4)})
 
+def create_article(request):
+    if request.method=="POST":
+        info=request.POST
+        title=info["title"]
+        content=info["content"]
+        author=info["author"]
+        add_new_post(title,author,content)
+
+    return render(request,"create_article.html")
 
 "*********************************KD_FUNCTIONS******************************************************************"
 
@@ -257,7 +266,7 @@ def get_list_of_reviewers():
     cursor =  connection.cursor()
 
 
-    query="select * from magazine_reviewer"
+    query="select * from magazine_reviewer where reviewer_id!='-1'"
     cursor.execute(query)
     y=cursor.fetchall()
 
@@ -290,6 +299,21 @@ def get_reviewer_name(r_id):
 
 
     return y[0][1]
+
+def add_new_post(title,author,content):
+    cursor =  connection.cursor()
+
+
+    query="select max(article_id) from magazine_article"
+    cursor.execute(query)
+    y=cursor.fetchall()
+    a_id=y[0][0]+1
+
+
+    query="INSERT INTO magazine_article  VALUES ('{}','{}','{}','{}',1,-1,'-1');"
+    print(a_id,title,author,content)
+    query=query.format(a_id,title,author,content)
+    cursor.execute(query)
 
 def atoi(stri):
     j=0
@@ -383,20 +407,6 @@ def get_reviewer_articles(r_id,status):
     y=cursor.fetchall()
     return y
 
-
-def add_new_post(title,author,content):
-    cursor =  connection.cursor()
-
-
-    query="select * from article"
-    cursor.execute(query)
-    y=cursor.fetchall()
-    a_id=len(y)+1
-
-
-    query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
-    query=query.format(a_id,title,author,content)
-    cursor.execute(query)
 
 
 
