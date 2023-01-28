@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db import connection
-<<<<<<< HEAD
 from django.db import IntegrityError
-=======
 from django.http import HttpResponseRedirect
->>>>>>> 6c6d3891ee793937906d08e505d1be687e247187
 
 
 # Create your views here.
+
+#Reviewer table should  have an entry with Reviewer_Id = -1
 
 def redirect_modules(role):
     if role==1:
@@ -119,7 +118,7 @@ def remove_reviewer(request):
         if user_details[1]==1:
             if request.method=="POST":
                 entered_data = request.POST
-                print(entered_data)
+                # print(entered_data)
                 if entered_data['username']=='':
                     return render(request, "admin_remove_reviewer.html",{'error':'Kindly enter a Reviewer ID.'})
                 select_query = "select * from magazine_reviewer where reviewer_id = '{}'"
@@ -154,19 +153,12 @@ def view_unassigned_articles(request):
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2]}
                 articles.append(details)
             
-<<<<<<< HEAD
-            return render(request,"admin_unassigned_articles_list.html",{"articles":articles})
-        else:
-            return redirect("../../login")
-    else:
-        return redirect("../../login")
-=======
             if request.method=="POST":
                 to_be_sent = request.POST
                 my_list=list(to_be_sent.values())[1:]
                 for i in my_list:
                     stri=i
-                    print(stri)
+                    # print(stri)
                     j=0
                     r_id=""
                     a_id=""
@@ -182,7 +174,6 @@ def view_unassigned_articles(request):
                     num=int(a_id)
                     send_for_review(num,r_id)
                     return HttpResponseRedirect("")
->>>>>>> 6c6d3891ee793937906d08e505d1be687e247187
 
             return render(request,"admin_unassigned_articles_list.html",{"articles":[articles,reviewers]})
         else:
@@ -195,7 +186,7 @@ def view_pending_articles(request):
         user_details = request.session['user']
         if user_details[1] == 1:
             fetched_data=get_articles_list(2)
-            print(fetched_data)
+            # print(fetched_data)
             articles = []
             for i in fetched_data:
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2],'reviewer':get_reviewer_name(i[6])}
@@ -227,6 +218,7 @@ def view_reviewed_articles(request):
                 article_id_list=list(to_be_published.values())[1:]
                 for i in article_id_list:
                     publish(i)
+                return HttpResponseRedirect("")
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             # revert()
             return render(request,"admin_reviewed_articles_list.html",{"articles":articles})
@@ -290,6 +282,9 @@ def create_article(request):
         title=info["title"]
         content=info["content"]
         author=info["author"]
+        title = title.replace("'","''")
+        content = content.replace("'","''")
+        author = author.replace("'","''")        
         add_new_post(title,author,content)
 
     return render(request,"create_article.html")
@@ -372,7 +367,7 @@ def add_new_post(title,author,content):
 
 
     query="INSERT INTO magazine_article  VALUES ('{}','{}','{}','{}',1,-1,'-1');"
-    print(a_id,title,author,content)
+    # print(a_id,title,author,content)
     query=query.format(a_id,title,author,content)
     cursor.execute(query)
 
