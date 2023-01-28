@@ -36,6 +36,14 @@ p {
     line-height: 22px;
 }
 
+h1 {
+  position: relative;
+  top: 3.25em;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
 
 .section-heading {
     text-align: center;
@@ -457,7 +465,7 @@ a.menu-link { display: none; }
 
 .video-overlay {
     position: absolute;
-    /* background-color: rgba(52, 58, 64, 0.80); */
+    background-color: rgba(52, 58, 64, 0.367);
     top: 0;
     left: 0;
     bottom: 6px;

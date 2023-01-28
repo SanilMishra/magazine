@@ -145,9 +145,9 @@ def view_reviewed_articles(request):
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             return render(request,"view_reviewed_articles.html",{"articles":articles})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def display_article_admin(request, article_id):
     if request.session.has_key('user'):
