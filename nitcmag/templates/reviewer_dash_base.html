@@ -39,12 +39,12 @@
 
       <li class="has-submenu"><a href="#section2">Articles</a>
         <ul class="sub-menu">
-          <li><a href="{% url "magazine:pending_articles_reviewer" %}" rel="sponsored" class="external">View Pending Articles</a></li>
-          <li><a href="{% url "magazine:reviewed_articles_reviewer" %}" rel="sponsored" class="external">View Reviewed Articles</a></li>
+          <li><a href="{% url "magazine:reviewer_pending_articles_list" %}" rel="sponsored" class="external">View Pending Articles</a></li>
+          <li><a href="{% url "magazine:reviewer_reviewed_articles_list" %}" rel="sponsored" class="external">View Reviewed Articles</a></li>
         </ul>
       </li>
 
-      <li class="has-submenu"><a href="#section2">{{ details.user_name }}</a>
+      <li class="has-submenu"><a href="#section2">{{ username }}</a>
         <ul class="sub-menu3">
           <li><a href="{% url "magazine:change_password" %}" rel="sponsored" class="external">Change Password</a></li>
           <li><a href="{% url "magazine:home" %}" rel="sponsored" class="external">Logout</a></li>
@@ -58,7 +58,6 @@
   <section class="section main-banner" id="top" data-section="section1">
     <img id="bg-img" src="{% static "Dash base/assets/images/nitc_mcs.png" %}">
     <div class="video-overlay header-text">
-      <div id = 'error'>{{ error }}</div>
       {% block body %}{% endblock %}
     </div>
   </section>

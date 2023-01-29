@@ -211,7 +211,13 @@ def view_reviewed_articles(request):
             fetched_data = cursor.fetchall()
             articles = []
             for i in fetched_data:
-                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3], 'rating': i[4]}
+                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3]}
+                for j in range(0,11):
+                    temp = 'checked' + str(j)
+                    if i[4] == j:
+                        details[temp] = 'checked'
+                    else :
+                        details[temp] = ''
                 articles.append(details)
             if request.method=="POST":
                 to_be_published = request.POST
@@ -227,13 +233,51 @@ def view_reviewed_articles(request):
     else:
         return redirect("../../login")
 
-def display_article_admin(request, article_id):
+def admin_view_article(request,article_id = None):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            data = get_article(article_id)
-            article = {"article_id":data[0], "title":data[1], "author":data[2], "content":data[3], "reviewer_id":data[4], "reviewer_name":"coming soon", "rating":data[6]}
-            return render(request,"display_article_admin.html", {"article":article})
+            if article_id == None:
+                return redirect('../')
+            cursor = connection.cursor()
+            query = "select title,author,content,status,reviewer_id,rating from magazine_article where article_id = '{}';"
+            query = query.format(article_id)
+            cursor.execute(query)
+            article = cursor.fetchall()
+
+            if len(article) == 0:
+                return redirect('../')
+
+            article = article[0]
+
+            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3], 'reviewer':'N/A'}
+            
+            if details['status'] >= 1 :
+                query = "select name from magazine_reviewer where reviewer_id = '{}';"
+                query = query.format(article[4])
+                cursor.execute(query)
+                reviewer_name = cursor.fetchall()[0][0]
+                details['reviewer'] = reviewer_name
+                if details['status'] >= 3:
+                    details['rating'] = article[5]
+            
+            if details['status'] == 1:
+                details['status'] = 'Unassigned'
+            elif details['status'] == 2:
+                details['status'] = 'Unreviewed'
+            elif details['status'] == 3:
+                details['status'] = 'Reviewed'
+            else:
+                details['status'] = 'Published'    
+
+            for i in range(0,11):
+                temp = 'checked' + str(i)
+                if article[3] >= 3 and article[5] == i:
+                    details[temp] = 'checked'
+                else :
+                    details[temp] = ''
+
+            return render(request,"admin_view_article.html", details)
         else:
             return redirect("../login")
     else:
@@ -246,28 +290,58 @@ def reviewer_module(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"reviewer_module.html")
+            return render(request,"reviewer_module.html",{'username' : get_reviewer_name(user_details[0])})
         else:
             return redirect("../login")
     else:
         return redirect("../login")
 
-def reviewed_articles_reviewer(request):
+def reviewer_reviewed_articles_list(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"reviewer_dash_base.html")
+            cursor = connection.cursor()
+            query = "select article_id,title,author,rating from magazine_article where reviewer_id = '{}' and status >= 3;"
+            query = query.format(user_details[0])
+            cursor.execute(query)
+            result = cursor.fetchall()
+            reviewed_list = []
+            for article in result:
+                dict = {}
+                dict['article_id'] = article[0]
+                dict['title'] = article[1]
+                dict['author'] = article[2]
+                for i in range(0,11):
+                    temp = 'checked' + str(i)
+                    if article[3] == i:
+                        print(i)
+                        dict[temp] = 'checked'
+                    else :
+                        dict[temp] = ''
+                reviewed_list.append(dict)
+            return render(request,"reviewer_reviewed_articles_list.html",{'username' : get_reviewer_name(user_details[0]), 'articles': reviewed_list})
         else:
             return redirect("../login")
     else:
         return redirect("../login")
 
-def pending_articles_reviewer(request):
-    #review article option
+def reviewer_pending_articles_list(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
-            return render(request,"reviewer_dash_base.html")
+            cursor = connection.cursor()
+            query = "select * from magazine_article where reviewer_id = '{}' and status = 2;"
+            query = query.format(user_details[0])
+            cursor.execute(query)
+            result = cursor.fetchall()
+            pending_list = []
+            for article in result:
+                dict = {}
+                dict['article_id'] = article[0]
+                dict['title'] = article[1]
+                dict['author'] = article[2]
+                pending_list.append(dict)
+            return render(request,"reviewer_pending_articles_list.html",{'username' : get_reviewer_name(user_details[0]), 'articles': pending_list})
         else:
             return redirect("../login")
     else:
@@ -391,64 +465,12 @@ def published_article(request, article_id):
     details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'reviewer' : article[3]}
     return render(request,"published_article.html",details)
 
-
-def admin_view_article(request,article_id = None):
-    if article_id == None:
-            return render(request,'reviewer_module.html',{'error' : 'No such article'})
-    if request.session.has_key('user'):
-        user_details = request.session['user']
-        if user_details[1] == 1:
-            cursor = connection.cursor()
-            query = "select title,author,content,status,reviewer_id,rating from magazine_article where article_id = '{}';"
-            query = query.format(article_id)
-            cursor.execute(query)
-            article = cursor.fetchall()
-
-            if len(article) == 0:
-                return render(request,'admin_module.html',{'error' : 'No such article'})
-
-            article = article[0]
-
-            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3], 'reviewer':'N/A'}
-            
-            if details['status'] >= 1 :
-                query = "select name from magazine_reviewer where reviewer_id = '{}';"
-                query = query.format(article[4])
-                cursor.execute(query)
-                reviewer_name = cursor.fetchall()[0][0]
-                details['reviewer'] = reviewer_name
-                if details['status'] >= 3:
-                    details['rating'] = article[5]
-            
-            if details['status'] == 1:
-                details['status'] = 'Unassigned'
-            elif details['status'] == 2:
-                details['status'] = 'Unreviewed'
-            elif details['status'] == 3:
-                details['status'] = 'Reviewed'
-            else:
-                details['status'] = 'Published'    
-
-            for i in range(0,11):
-                temp = 'checked' + str(i)
-                if article[3] >= 3 and article[5] == i:
-                    details[temp] = 'checked'
-                else :
-                    details[temp] = ''
-
-            return render(request,"admin_view_article.html", details)
-        else:
-            return redirect("../login")
-    else:
-        return redirect("../login")
-
-
 def reviewer_view_article(request,article_id=None):
-    if article_id == None:
-            return render(request,'reviewer_module.html')
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
+            if article_id == None:
+                return redirect('../')
             cursor = connection.cursor()
             query = "select title,author,content,status,rating,reviewer_id from magazine_article where article_id = '{}';"
             query = query.format(article_id)
@@ -456,12 +478,12 @@ def reviewer_view_article(request,article_id=None):
             article = cursor.fetchall()
             
             if len(article) == 0:
-                return render(request,'reviewer_module.html',{'error' : 'No such article'})
+                return redirect('../')
             article = article[0]
             if article[5] != user_details[0]:
-                return render(request, 'reviewer_module.html',{'error' : 'Access Denied'})
+                return redirect('../')
 
-            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : '', 'error' : ''}
+            details = {'username' : get_reviewer_name(user_details[0]), 'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : '', 'error' : ''}
             
             if details['status'] == 2:
                 details['status'] = 'Unreviewed'
@@ -497,9 +519,9 @@ def reviewer_view_article(request,article_id=None):
             return render(request,"reviewer_view_article.html",details)
                 
         else:
-            return redirect("../../login")
+            return redirect("../login")
     else:
-        return redirect("../../login")
+        return redirect("../login")
 
 
 "***************************************************************************************************************"
