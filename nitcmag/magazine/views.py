@@ -394,7 +394,7 @@ def published_article(request, article_id):
 
 def admin_view_article(request,article_id = None):
     if article_id == None:
-            return render(request,'reviewer_module.html',{'error' : 'No such article'})
+            return redirect('../')
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
@@ -445,7 +445,7 @@ def admin_view_article(request,article_id = None):
 
 def reviewer_view_article(request,article_id=None):
     if article_id == None:
-            return render(request,'reviewer_module.html')
+            return redirect('../')
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
