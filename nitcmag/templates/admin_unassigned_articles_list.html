@@ -46,7 +46,7 @@
                 {% for article in articles.0 %}
                 <tr style="color: rgb(218, 218, 218);">
                     <td>{{article.article_id }}</td>
-                    <td><a href="{% url "magazine:display_article_admin" article.article_id %}">{{article.title }}</a></td>
+                    <td><a href="{% url "magazine:admin_view_article" article.article_id %}">{{article.title }}</a></td>
                     <td>{{ article.author }}</td>
                     <td>
                         <form method="POST">

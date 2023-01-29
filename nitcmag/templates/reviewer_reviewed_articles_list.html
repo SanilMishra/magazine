@@ -1,59 +1,24 @@
-{% extends 'admin_dash_base.html' %}
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-    <body>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Content</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for article in articles %}
-                <tr>
-                    <td>{{ article.title }}</td>
-                    <td>{{ article.author }}</td>
-                    <td>{{ article.content }}</td>
-                    <td>{{ article.status }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </body>
-</html> -->
-
-
+{% extends 'reviewer_dash_base.html' %}
 
 {% block title %}Reviewed Articles{% endblock %}
 
 {% block body %}
     <h1 class="article-list-heading">REVIEWED ARTICLES</h1>
-    <form method="POST">
     <table class="caption" style="background-color: rgba(62, 78, 105, 0.9); font-size: large; border-radius: 5px;">
         <thead>
             <tr style="color: rgb(200, 170, 18);">
-                <th></th>
                 <th>Article ID</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Reviewer ID</th>
                 <th>Rating</th>
             </tr>
         </thead>
         <tbody>
-            
-                {% csrf_token %}
                 {% for article in articles %}
                 <tr style="color: rgb(218, 218, 218);">
-                    <td><input type="checkbox" name=article_id{{article.article_id}} value={{article.article_id}}></td>
-                    <td>{{article.article_id }}</td>
-                    <td><a href="{% url "magazine:admin_view_article" article.article_id %}">{{article.title }}</a></td>
+                    <td>{{ article.article_id }}</td>
+                    <td><a href="{% url "magazine:reviewer_view_article" article.article_id %}">{{ article.title }}</a></td>
                     <td>{{ article.author }}</td>
-                    <td>{{ article.reviewer_id }}</td>
                     <td>
                         <fieldset class="rate">
                             <input type="radio" id="rating10" name="rating{{article.article_id}}" value="10" {{article.checked10}} disabled/><label for="rating10" title="5 stars" disabled></label>
@@ -70,13 +35,6 @@
                     </td>
                 </tr>
                 {% endfor %}
-                <tr><td><input type="submit" value="Publish"></td></tr>
-                    
-
-            
         </tbody>
     </table>
-    </form>
-
-    
 {% endblock %}
