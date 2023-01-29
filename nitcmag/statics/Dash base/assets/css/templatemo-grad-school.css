@@ -13,6 +13,142 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+.loginhere {
+  text-align: center;
+  color: #888;
+  margin-top: 63px; }
+
+.loginhere-link {
+  color: #25d2f5;
+  text-decoration: none; }
+  .loginhere-link:hover {
+    text-decoration: underline; }
+
+.form {
+  background-color: rgba(65, 72, 77, 0.85);
+  border-radius: 20px;
+  box-sizing: border-box;
+  height: 29.6875em;
+  padding: 20px 50px 20px 50px;
+  width: 500px;
+  margin-top: 100px;
+}
+
+.title {
+  color: #fff;
+  font-style:normal;
+  text-transform: uppercase;
+  font-size: 35px;
+  font-weight: 800;
+  margin-top: 30px;
+  text-align: center;
+}
+optgroup { font-size:13px; }
+
+.title em {
+  font-style: normal;
+  color: #25d2f5;
+  font-weight: 800;
+}
+
+.input-container {
+  height: 50px;
+  position: relative;
+  width: 100%;
+}
+
+.ic1 {
+  margin-top: 20px;
+}
+
+.ic2 {
+  margin-top: 20px;
+}
+
+.ic3 {
+    margin-top: 20px;
+    color: #888;
+}
+
+.input {
+  background-color: #fff;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+}
+
+.cut {
+  background-color: rgba(65, 72, 77, 0.85);
+  border-radius: 10px;
+  height: 20px;
+  left: 20px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform 200ms;
+  width: 76px;
+}
+
+.cut-short {
+  width: 80px;
+}
+
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+  transform: translateY(8px);
+  text-align: center;
+}
+
+.placeholder {
+  color: #888;
+  left: 20px;
+  font-size: 14px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 100%;
+  transition: transform 200ms, color 200ms;
+  top: 20px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+  transform: translateY(-30px) translateX(10px) scale(0.75);
+  text-align: center;
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+  color: #25d2f5;
+}
+
+.input:focus ~ .placeholder {
+  /* color: #dc2f55; */
+  color: #25d2f5;
+}
+
+.submit {
+  background-color: #25d2f5;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 38px;
+  text-align: center;
+  width: 100%;
+}
+.submit:hover{
+  background-color: #1ea8c4;
+}
 /* Basic */
 
 a {
@@ -35,6 +171,15 @@ p {
     font-size: 13px;
     line-height: 22px;
 }
+
+.article-list-heading{
+  position: relative;
+  top: 3.25em;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
 
 .section-heading {
     text-align: center;
@@ -164,7 +309,7 @@ a.menu-link { display: none; }
 }
 
 .main-header {
-    background-color: #343a40;
+    background-color: #0a1a36;
     height: 80px;
     position: fixed;
     z-index: 12;
@@ -228,8 +373,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu {
     position: absolute;
-    width: 185px;
-    background-color: #00d5ff47;
+    width: 120px;
+    background-color: #123f72;
     opacity: 0;
     visibility: hidden;
     transition: all 0.5s;
@@ -237,8 +382,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu2 {
   position: absolute;
-  width: 157px;
-  background-color: #00d5ff47;
+  width: 135px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -246,8 +391,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu3 {
   position: absolute;
-  width: 195px;
-  background-color: #00d5ff47;
+  width: 172px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -255,8 +400,8 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu4 {
   position: absolute;
-  width: 195px;
-  background-color: #00d5ff47;
+  width: 172px;
+  background-color: #123f72;
   opacity: 0;
   visibility: hidden;
   transition: all 0.5s;
@@ -284,10 +429,11 @@ a.menu-link { display: none; }
 
 .main-menu li .sub-menu li {
     display: block;
-    text-align: center;
+    text-align:center;
     line-height: 20px;
     margin-left: 0px;
     margin-bottom: 15px;
+    padding-right: 4px;
     padding-bottom: 15px;
     border-bottom: 1px solid #121b2f;
 }
@@ -1714,7 +1860,7 @@ section.contact form button {
 /* Footer */
 
 footer {
-    background-color: #343a40;
+    background-color: rgba(6, 22, 53, 0.95);
     text-align: center;
     position: fixed;
     bottom: 0;

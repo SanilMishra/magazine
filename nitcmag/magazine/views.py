@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.db import connection
+from django.db import IntegrityError
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
+
+#Reviewer table should  have an entry with Reviewer_Id = -1
 
 def redirect_modules(role):
     if role==1:
@@ -83,51 +87,118 @@ def admin_module(request):
         return redirect("../login")
 
 def appoint_reviewer(request):
-    return render(request,"admin_dash_base.html")
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1]==1:
+            if request.method=="POST":
+                entered_data = request.POST
+                if len(entered_data.keys())<4:
+                    return render(request, "admin_appoint_reviewer.html",{'error':'Kindly enter all values.'})
+                insert_query = "insert into magazine_reviewer values ('{}','{}')"
+                reg_login_query = "insert into magazine_login_cred values ('{}','{}',2)"
+                insert_query = insert_query.format(entered_data['username'],entered_data['name'])
+                reg_login_query = reg_login_query.format(entered_data['username'],entered_data['password'])
+                cursor = connection.cursor()
+                try:
+                    cursor.execute(reg_login_query)
+                    cursor.execute(insert_query)
+                except IntegrityError :
+                    return  render(request, "admin_appoint_reviewer.html",{'error':'User already exists'})
+                return render(request,"admin_appoint_reviewer_1.html")
+            return render(request,"admin_appoint_reviewer.html")
+        else:
+            return redirect("../../login")
+    else:
+        return redirect("../../login")
+    
 
 def remove_reviewer(request):
-    return render(request,"admin_dash_base.html")
+    if request.session.has_key('user'):
+        user_details = request.session['user']
+        if user_details[1]==1:
+            if request.method=="POST":
+                entered_data = request.POST
+                # print(entered_data)
+                if entered_data['username']=='':
+                    return render(request, "admin_remove_reviewer.html",{'error':'Kindly enter a Reviewer ID.'})
+                select_query = "select * from magazine_reviewer where reviewer_id = '{}'"
+                select_query = select_query.format(entered_data['username'])
+                remove_query = "delete from magazine_reviewer where reviewer_id = '{}'"
+                remove_login_query = "delete from magazine_login_cred where u_id = '{}'"
+                remove_query = remove_query.format(entered_data['username'])
+                remove_login_query = remove_login_query.format(entered_data['username'])
+                cursor = connection.cursor()
+                cursor.execute(select_query)
+                y = cursor.fetchall()
+                if len(y)==0:
+                    return render(request, "admin_remove_reviewer.html",{'error':"User doesn't exist."})
+                cursor.execute(remove_query)
+                cursor.execute(remove_login_query)
+                return render(request, "admin_remove_reviewer_1.html")
+            return render(request,"admin_remove_reviewer.html")
+        else:
+            return redirect("../../login")
+    else:
+        return redirect("../../login")
     
 
 def view_unassigned_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            cursor = connection.cursor()
-            query = "select article_id,title,author from magazine_article where status=1;"
-            cursor.execute(query)
-            fetched_data = cursor.fetchall()
+            fetched_data=get_articles_list(1)
             articles = []
+            reviewers = get_list_of_reviewers()
             for i in fetched_data:
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2]}
                 articles.append(details)
-            # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
-            print(articles)
-            return render(request,"view_unassigned_articles.html",{"articles":articles})
-        else:
-            return redirect("../login")
-    else:
-        return redirect("../login")
+            
+            if request.method=="POST":
+                to_be_sent = request.POST
+                my_list=list(to_be_sent.values())[1:]
+                for i in my_list:
+                    stri=i
+                    # print(stri)
+                    j=0
+                    r_id=""
+                    a_id=""
+                    while(j<len(stri) and stri[j]!='*'):
+                        r_id=r_id+stri[j]
+                        j=j+1
+                    r_id=r_id
+                    j=j+1
+                    while(j<len(stri)):
+                        a_id=a_id+stri[j]
+                        j=j+1
+                    a_id=a_id
+                    num=int(a_id)
+                    send_for_review(num,r_id)
+                    return HttpResponseRedirect("")
 
-def send_for_review(request):
-    if request.session.has_key('user'):
-        user_details = request.session['user']
-        if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            return render(request,"admin_unassigned_articles_list.html",{"articles":[articles,reviewers]})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def view_pending_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_dash_base.html"{})
+            fetched_data=get_articles_list(2)
+            # print(fetched_data)
+            articles = []
+            for i in fetched_data:
+                details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2],'reviewer':get_reviewer_name(i[6])}
+                articles.append(details)
+
+            return render(request,"admin_pending_articles_list.html",{"articles":articles})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
+
+
 
 def view_reviewed_articles(request):
     # select articles from this, give publish option
@@ -142,12 +213,19 @@ def view_reviewed_articles(request):
             for i in fetched_data:
                 details = {'article_id' : i[0], 'title' : i[1], 'author' : i[2], 'reviewer_id': i[3], 'rating': i[4]}
                 articles.append(details)
+            if request.method=="POST":
+                to_be_published = request.POST
+                article_id_list=list(to_be_published.values())[1:]
+                for i in article_id_list:
+                    publish(i)
+                return HttpResponseRedirect("")
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
-            return render(request,"view_reviewed_articles.html",{"articles":articles})
+            # revert()
+            return render(request,"admin_reviewed_articles_list.html",{"articles":articles})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def display_article_admin(request, article_id):
     if request.session.has_key('user'):
@@ -195,8 +273,23 @@ def pending_articles_reviewer(request):
     else:
         return redirect("../login")
 
+def view_magazine(request):
+    return render(request,'magazine.html',{'articles':get_articles_list(4)})
 
-"***************************************************************************************************************"
+def create_article(request):
+    if request.method=="POST":
+        info=request.POST
+        title=info["title"]
+        content=info["content"]
+        author=info["author"]
+        title = title.replace("'","''")
+        content = content.replace("'","''")
+        author = author.replace("'","''")        
+        add_new_post(title,author,content)
+
+    return render(request,"create_article.html")
+
+"*********************************KD_FUNCTIONS******************************************************************"
 
 def get_article(a_id):
     cursor =  connection.cursor()
@@ -205,6 +298,87 @@ def get_article(a_id):
     cursor.execute(query)
     y=cursor.fetchone()
     return y
+
+def publish(a_id):
+    cursor =  connection.cursor()
+    query="update magazine_article set status=4 where article_id={}"
+    query=query.format(a_id)
+    cursor.execute(query)
+
+def revert():
+    cursor = connection.cursor()
+    query = "update magazine_article set status=3"
+    cursor.execute(query)
+
+def get_articles_list(status):
+    cursor =  connection.cursor()
+    query="select * from magazine_article where status={}"
+    query=query.format(status)
+    cursor.execute(query)
+    y=cursor.fetchall()
+    return y
+
+def get_list_of_reviewers():
+    cursor =  connection.cursor()
+
+
+    query="select * from magazine_reviewer where reviewer_id!='-1'"
+    cursor.execute(query)
+    y=cursor.fetchall()
+
+    return y
+
+def send_for_review(a_id,r_id):
+    cursor =  connection.cursor()
+
+
+    query="update magazine_article set reviewer_id={},status=2 where article_id={}"
+    query=query.format(r_id,a_id)
+    cursor.execute(query)
+
+def send_for_review(a_id,r_id):
+    cursor =  connection.cursor()
+
+
+    query="update magazine_article set reviewer_id='{}',status=2 where article_id={}"
+    query=query.format(r_id,a_id)
+    cursor.execute(query)
+
+def get_reviewer_name(r_id):
+    cursor =  connection.cursor()
+
+
+    query="select * from magazine_reviewer where reviewer_id='{}'"
+    query=query.format(r_id)
+    cursor.execute(query)
+    y=cursor.fetchall()
+
+
+    return y[0][1]
+
+def add_new_post(title,author,content):
+    cursor =  connection.cursor()
+
+
+    query="select max(article_id) from magazine_article"
+    cursor.execute(query)
+    y=cursor.fetchall()
+    a_id=y[0][0]+1
+
+
+    query="INSERT INTO magazine_article  VALUES ('{}','{}','{}','{}',1,-1,'-1');"
+    # print(a_id,title,author,content)
+    query=query.format(a_id,title,author,content)
+    cursor.execute(query)
+
+def atoi(stri):
+    j=0
+    num=0
+    while(j<len(stri)):
+        num=num*10+int(stri[j])
+        j=j+1
+    return num
+
 
 "***************************************************************************************************************"
 
@@ -283,16 +457,6 @@ def reviewer_artcile(request):
 
 "***************************************************************************************************************"
 
-def view_magazine(request):
-    return render(request,'magazine.html')
-
-def send_for_review(a_id,r_id):
-    cursor =  connection.cursor()
-
-
-    query="update article set reviewer_id={},status=2 where article_id={}"
-    query=query.format(r_id,a_id)
-    cursor.execute(query)
 
 
 def give_rating(a_id,rating):
@@ -307,29 +471,6 @@ def give_rating(a_id,rating):
         cursor.execute(query)
 
 
-def publish(a_id):
-    cursor =  connection.cursor()
-
-
-    query="update article set status=4 where article_id={}"
-    query=query.format(a_id)
-    cursor.execute(query)
-
-
-def get_articles_list(status):
-    cursor =  connection.cursor()
-
-
-    query="select * from article where status={}"
-    query=query.format(status)
-    cursor.execute(query)
-    y=cursor.fetchall()
-    return y
-
-
-
-
-
 def get_reviewer_articles(r_id,status):
     cursor =  connection.cursor()
 
@@ -341,29 +482,7 @@ def get_reviewer_articles(r_id,status):
     return y
 
 
-def add_new_post(title,author,content):
-    cursor =  connection.cursor()
 
 
-    query="select * from article"
-    cursor.execute(query)
-    y=cursor.fetchall()
-    a_id=len(y)+1
 
 
-    query="INSERT INTO article  VALUES ({},{},{},{},NULL,1,NULL);"
-    query=query.format(a_id,title,author,content)
-    cursor.execute(query)
-
-
-def get_reviewer_name(r_id):
-    cursor =  connection.cursor()
-
-
-    query="select * from reviewer where reviewer_id={}"
-    query=query.format(r_id)
-    cursor.execute(query)
-    y=cursor.fetchall()
-
-
-    return y[0][1]

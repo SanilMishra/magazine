@@ -1,0 +1,62 @@
+{% extends 'admin_dash_base.html' %}
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Content</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                <tr>
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.content }}</td>
+                    <td>{{ article.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html> -->
+
+
+
+{% block title %}Review pending Articles{% endblock %}
+
+{% block body %}
+    <h1 class="article-list-heading">REVIEW PENDING ARTICLES</h1>
+    <table class="caption" style="background-color: rgba(62, 78, 105, 0.9); font-size: large; border-radius: 5px;">
+        <thead>
+            <tr style="color: rgb(200, 170, 18);">
+                <th>Article ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Reviewer</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+                {% csrf_token %}
+                {% for article in articles %}
+                <tr style="color: rgb(218, 218, 218);">
+                    <td>{{article.article_id }}</td>
+                    <td><a href="{% url "magazine:display_article_admin" article.article_id %}">{{article.title }}</a></td>
+                    <td>{{ article.author }}</td>
+                    <td>{{ article.reviewer }}</td>
+                </tr>
+                {% endfor %}
+                    
+
+            
+        </tbody>
+    </table>
+
+    
+{% endblock %}
