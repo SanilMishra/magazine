@@ -1,0 +1,32 @@
+{% extends 'admin_dash_base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<div class = "article">
+    <h1 id = "article-title">{{ title }}</h1>
+    <h5 id = "article-author">by <em>{{ author }}</em></h5>
+    <div class = "article-content-rating">
+        <hr>
+        <p>{{ content }}</p>
+        <hr>
+        <p id = "admin-article-status">Status: &emsp;&emsp;&emsp; <span>{{ status }}</span></p>
+        <p>Reviewer: &ensp;&emsp; <span>{{ reviewer }}</span></p>
+        <div class = "article-rating">
+            <p>Rating:</p>
+            <fieldset class="rate">
+                <input type="radio" id="rating10" name="rating" value="10" {{checked10}} disabled/><label for="rating10" title="5 stars" disabled></label>
+                <input type="radio" id="rating9" name="rating" value="9"   {{checked9}}  disabled/><label class="half" for="rating9" title="4 1/2 stars" disabled></label>
+                <input type="radio" id="rating8" name="rating" value="8"   {{checked8}}  disabled/><label for="rating8" title="4 stars" disabled></label>
+                <input type="radio" id="rating7" name="rating" value="7"   {{checked7}}  disabled/><label class="half" for="rating7" title="3 1/2 stars" disabled></label>
+                <input type="radio" id="rating6" name="rating" value="6"   {{checked6}}  disabled/><label for="rating6" title="3 stars" disabled></label>
+                <input type="radio" id="rating5" name="rating" value="5"   {{checked5}}  disabled/><label class="half" for="rating5" title="2 1/2 stars" disabled></label>
+                <input type="radio" id="rating4" name="rating" value="4"   {{checked4}}  disabled/><label for="rating4" title="2 stars" disabled></label>
+                <input type="radio" id="rating3" name="rating" value="3"   {{checked3}}  disabled/><label class="half" for="rating3" title="1 1/2 stars" disabled></label>
+                <input type="radio" id="rating2" name="rating" value="2"   {{checked2}}  disabled/><label for="rating2" title="1 star" disabled></label>
+                <input type="radio" id="rating1" name="rating" value="1"   {{checked1}}  disabled/><label class="half" for="rating1" title="1/2 star" disabled></label>
+            </fieldset>
+        </div>
+    </div>
+</div>
+{% endblock %}
