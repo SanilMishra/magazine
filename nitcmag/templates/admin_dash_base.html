@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{% static "Dash base/assets/css/templatemo-grad-school.css" %}">
   <link rel="stylesheet" href="{% static "Dash base/assets/css/owl.css" %}">
   <link rel="stylesheet" href="{% static "Dash base/assets/css/lightbox.css" %}">
+  <link rel="stylesheet" href="{% static "Dash base/assets/css/star-rating.css" %}">
+
 </head>
 
 
@@ -61,15 +63,11 @@
   
   <!-- ***** Main Banner Area Start ***** -->
   <section class="section main-banner" id="top" data-section="section1">
-      
-      <video autoplay muted loop id="bg-video">
-          <source src="{% static "Dash base/assets/images/header.mp4" %}" type="video/mp4" />
-      </video>
-
-      <div class="video-overlay header-text">
-        {% block body %}{% endblock %}
-      </div>
-      
+    <img id="bg-img" src="{% static "Dash base/assets/images/nitc_mcs.png" %}">
+    <div id = 'error'>{{ error }}</div>
+    <div class="video-overlay header-text">
+      {% block body %}{% endblock %}
+    </div>   
   </section>
   <!-- ***** Main Banner Area End ***** -->
 
