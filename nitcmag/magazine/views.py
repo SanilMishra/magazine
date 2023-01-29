@@ -397,7 +397,7 @@ def admin_article(request,article_id):
         user_details = request.session['user']
         if user_details[1] == 1:
             cursor = connection.cursor()
-            query = "select title,author,content,status,reviewer,rating from article where article_id = {};"
+            query = "select title,author,content,status,reviewer,rating from article where article_id = '{}';"
             query = query.format(article_id)
             cursor.execute(query)
             article = cursor.fetchall()[0]
@@ -419,36 +419,51 @@ def admin_article(request,article_id):
 
 
 def reviewer_artcile(request):
-    article_id = 3
+    article_id = 4
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
             cursor = connection.cursor()
-            query = "select title,author,content,status,rating from magazine_article where article_id = {};"
+            query = "select title,author,content,status,rating from magazine_article where article_id = '{}';"
             query = query.format(article_id)
             cursor.execute(query)
             article = cursor.fetchall()[0]
             
-            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : ''}
+            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : '', 'error' : ''}
             
-            if details['status'] == 1:
-                details['status'] = 'Unassigned'
-            elif details['status'] == 2:
+            if details['status'] == 2:
                 details['status'] = 'Unreviewed'
             elif details['status'] == 3:
+                details['disabled'] = 'disabled'
                 details['status'] = 'Reviewed'
             else:
                 details['disabled'] = 'disabled'
                 details['status'] = 'Published'
 
+            final_status = article[3]
+            final_rating = article[4]
+            if request.method == 'POST':
+                res = request.POST
+                if details['status'] == 'Unreviewed':
+                    query = "update magazine_article set rating = '{}', status = 3 where article_id = '{}';"
+                    query = query.format(res['rating'],article_id)
+                    cursor.execute(query)
+                    details['status'] = 'Reviewed'
+                    details['disabled'] = 'disabled'
+                    final_status = 3
+                    final_rating = int(res['rating'])
+                else :
+                    details['error'] = 'Article cannot be re-rated.'
+
             for i in range(0,11):
                 temp = 'checked' + str(i)
-                if article[3] >= 3 and article[4] == i:
+                if final_status >= 3 and final_rating == i:
                     details[temp] = 'checked'
                 else :
                     details[temp] = ''
 
-            return render(request,"reviewer_view_article.html",{'details': details})
+            return render(request,"reviewer_view_article.html",details)
+                
         else:
             return redirect("../../login")
     else:

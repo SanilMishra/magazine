@@ -56,9 +56,10 @@
 
   <!-- ***** Main Banner Area Start ***** -->
   <section class="section main-banner" id="top" data-section="section1">
+    <img id="bg-img" src="{% static "Dash base/assets/images/nitc_mcs.png" %}">
     <div class="video-overlay header-text">
-        {% block body %}{% endblock %}
-      </div>
+      {% block body %}{% endblock %}
+    </div>
   </section>
   <!-- ***** Main Banner Area End ***** -->
 
@@ -71,7 +72,6 @@
       </div>
     </div>
   </footer>
-
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
   <script src="{% static "Dash base/vendor/jquery/jquery.min.js" %}"></script>
