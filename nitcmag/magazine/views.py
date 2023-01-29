@@ -123,7 +123,7 @@ def view_pending_articles(request):
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 1:
-            return render(request,"admin_dash_base.html")
+            return render(request,"admin_dash_base.html"{})
         else:
             return redirect("../login")
     else:
@@ -239,28 +239,46 @@ def admin_article(request,article_id):
                     details['rating'] = article[5]
             return render(request,"admin_article.html",details)
         else:
-            return redirect("../login.html")
+            return redirect("../login")
     else:
-        return redirect("../login.html")
+        return redirect("../login")
 
 
-def reviewer_artcile(request,article_id):
+def reviewer_artcile(request):
+    article_id = 3
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
             cursor = connection.cursor()
-            query = "select title,author,content,status,rating from article, reviewer where article_id = {};"
+            query = "select title,author,content,status,rating from magazine_article where article_id = {};"
             query = query.format(article_id)
             cursor.execute(query)
             article = cursor.fetchall()[0]
-            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3]}
-            if details['status'] >= 3:
-                details['rating'] = article[4]
-            return render(request,"reviewer_article.html",details)
+            
+            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : ''}
+            
+            if details['status'] == 1:
+                details['status'] = 'Unassigned'
+            elif details['status'] == 2:
+                details['status'] = 'Unreviewed'
+            elif details['status'] == 3:
+                details['status'] = 'Reviewed'
+            else:
+                details['disabled'] = 'disabled'
+                details['status'] = 'Published'
+
+            for i in range(0,11):
+                temp = 'checked' + str(i)
+                if article[3] >= 3 and article[4] == i:
+                    details[temp] = 'checked'
+                else :
+                    details[temp] = ''
+
+            return render(request,"reviewer_view_article.html",{'details': details})
         else:
-            return redirect("../login.html")
+            return redirect("../../login")
     else:
-        return redirect("../login.html")
+        return redirect("../../login")
 
 
 "***************************************************************************************************************"

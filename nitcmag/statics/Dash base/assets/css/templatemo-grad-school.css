@@ -36,7 +36,6 @@ p {
     line-height: 22px;
 }
 
-
 .section-heading {
     text-align: center;
     margin-bottom: 70px;
@@ -438,7 +437,6 @@ a.menu-link { display: none; }
 .main-banner {
   position: relative;
   max-height: 100%;
-  overflow: hidden;
   margin-bottom: -7px;
 }
 
@@ -457,11 +455,13 @@ a.menu-link { display: none; }
 
 .video-overlay {
     position: absolute;
-    /* background-color: rgba(52, 58, 64, 0.80); */
     top: 0;
     left: 0;
-    bottom: 6px;
     width: 100%;
+    background-image: url(../images/nitc_mcs.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
 }
 
 .main-banner .caption {
@@ -498,6 +498,44 @@ a.menu-link { display: none; }
   font-weight: 900;
 }
 
+.article {
+  background-color: rgba(65, 72, 77, 0.85);
+  border-radius: 20px;
+  box-sizing: border-box;
+  min-height: 600px;
+  padding: 20px 50px 20px 50px;
+  width: 80vw;
+  margin: 160px auto;
+}
+
+#article-title {
+  margin-top: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#article-author {
+  text-align: center;
+}
+
+.article-content-rating p {
+  font-size: medium;
+  margin-bottom: 0;
+}
+
+.article-rating {
+  display: flex;
+  align-items: center;
+}
+
+.article-rating p {
+  padding-top: 10px;
+  margin-right: 10px;
+}
+
+#submit-rating {
+  margin-left: 80px;
+}
 @media screen and (max-width: 1180px) {
 
   .main-banner .caption h6 {
@@ -1678,6 +1716,9 @@ section.contact form button {
 footer {
     background-color: #343a40;
     text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 footer p {

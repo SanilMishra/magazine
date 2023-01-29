@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{% static "Dash base/assets/css/templatemo-grad-school.css" %}">
   <link rel="stylesheet" href="{% static "Dash base/assets/css/owl.css" %}">
   <link rel="stylesheet" href="{% static "Dash base/assets/css/lightbox.css" %}">
+  <link rel="stylesheet" href="{% static "Dash base/assets/css/star-rating.css" %}">
+  
 </head>
 
 
@@ -42,7 +44,7 @@
         </ul>
       </li>
 
-      <li class="has-submenu"><a href="#section2">{% block name %}{% endblock %}</a>
+      <li class="has-submenu"><a href="#section2">{{ details.user_name }}</a>
         <ul class="sub-menu3">
           <li><a href="{% url "magazine:change_password" %}" rel="sponsored" class="external">Change Password</a></li>
           <li><a href="{% url "magazine:home" %}" rel="sponsored" class="external">Logout</a></li>
@@ -54,11 +56,7 @@
 
   <!-- ***** Main Banner Area Start ***** -->
   <section class="section main-banner" id="top" data-section="section1">
-      <video autoplay muted loop id="bg-video">
-          <source src="{% static "Dash base/assets/images/header.mp4" %}" type="video/mp4" />
-      </video>
-
-      <div class="video-overlay header-text">
+    <div class="video-overlay header-text">
         {% block body %}{% endblock %}
       </div>
   </section>

@@ -1,0 +1,32 @@
+{% extends 'reviewer_dash_base.html' %}
+
+{% block title %}{{ details.title }}{% endblock %}
+
+{% block body %} 
+<div class = "article">
+    <h1 id = "article-title">{{ details.title }}</h1>
+    <h5 id = "article-author">by <em>{{ details.author }}</em></h5>
+    <hr>
+    <div class = "article-content-rating">
+        <p>{{ details.content }}</p>
+        <hr>
+        <p>Status: {{ details.status }}</p>
+        <div class = "article-rating">
+            <p>Rating:</p>
+            <fieldset class="rate">
+                <input type="radio" id="rating10" name="rating" value="10" {{details.checked10}} {{details.disabled}}/><label for="rating10" title="5 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating9" name="rating" value="9"   {{details.checked9}}  {{details.disabled}}/><label class="half" for="rating9" title="4 1/2 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating8" name="rating" value="8"   {{details.checked8}}  {{details.disabled}}/><label for="rating8" title="4 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating7" name="rating" value="7"   {{details.checked7}}  {{details.disabled}}/><label class="half" for="rating7" title="3 1/2 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating6" name="rating" value="6"   {{details.checked6}}  {{details.disabled}}/><label for="rating6" title="3 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating5" name="rating" value="5"   {{details.checked5}}  {{details.disabled}}/><label class="half" for="rating5" title="2 1/2 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating4" name="rating" value="4"   {{details.checked4}}  {{details.disabled}}/><label for="rating4" title="2 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating3" name="rating" value="3"   {{details.checked3}}  {{details.disabled}}/><label class="half" for="rating3" title="1 1/2 stars" {{details.disabled}}></label>
+                <input type="radio" id="rating2" name="rating" value="2"   {{details.checked2}}  {{details.disabled}}/><label for="rating2" title="1 star" {{details.disabled}}></label>
+                <input type="radio" id="rating1" name="rating" value="1"   {{details.checked1}}  {{details.disabled}}/><label class="half" for="rating1" title="1/2 star" {{details.disabled}}></label>
+            </fieldset>
+        </div>
+        <input type="submit" id="submit-rating" value="Submit Rating" />
+    </div>
+</div>
+{% endblock %}
