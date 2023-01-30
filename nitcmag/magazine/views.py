@@ -252,7 +252,7 @@ def admin_view_article(request,article_id = None):
 
             details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3], 'reviewer':'N/A'}
             
-            if details['status'] >= 1 :
+            if details['status'] >= 2 :
                 query = "select name from magazine_reviewer where reviewer_id = '{}';"
                 query = query.format(article[4])
                 cursor.execute(query)
@@ -279,9 +279,9 @@ def admin_view_article(request,article_id = None):
 
             return render(request,"admin_view_article.html", details)
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 
 "***************************************************************************************************************"
@@ -314,7 +314,7 @@ def reviewer_reviewed_articles_list(request):
                 for i in range(0,11):
                     temp = 'checked' + str(i)
                     if article[3] == i:
-                        print(i)
+                        # print(i)
                         dict[temp] = 'checked'
                     else :
                         dict[temp] = ''
@@ -465,61 +465,7 @@ def published_article(request, article_id):
     details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'reviewer' : article[3]}
     return render(request,"published_article.html",details)
 
-
-def admin_view_article(request,article_id = None):
-    if article_id == None:
-            return redirect('../')
-    if request.session.has_key('user'):
-        user_details = request.session['user']
-        if user_details[1] == 1:
-            cursor = connection.cursor()
-            query = "select title,author,content,status,reviewer_id,rating from magazine_article where article_id = '{}';"
-            query = query.format(article_id)
-            cursor.execute(query)
-            article = cursor.fetchall()
-
-            if len(article) == 0:
-                return render(request,'admin_module.html',{'error' : 'No such article'})
-
-            article = article[0]
-
-            details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3], 'reviewer':'N/A'}
-            
-            if details['status'] >= 1 :
-                query = "select name from magazine_reviewer where reviewer_id = '{}';"
-                query = query.format(article[4])
-                cursor.execute(query)
-                reviewer_name = cursor.fetchall()[0][0]
-                details['reviewer'] = reviewer_name
-                if details['status'] >= 3:
-                    details['rating'] = article[5]
-            
-            if details['status'] == 1:
-                details['status'] = 'Unassigned'
-            elif details['status'] == 2:
-                details['status'] = 'Unreviewed'
-            elif details['status'] == 3:
-                details['status'] = 'Reviewed'
-            else:
-                details['status'] = 'Published'    
-
-            for i in range(0,11):
-                temp = 'checked' + str(i)
-                if article[3] >= 3 and article[5] == i:
-                    details[temp] = 'checked'
-                else :
-                    details[temp] = ''
-
-            return render(request,"admin_view_article.html", details)
-        else:
-            return redirect("../login")
-    else:
-        return redirect("../login")
-
-
 def reviewer_view_article(request,article_id=None):
-    if article_id == None:
-            return redirect('../')
     if request.session.has_key('user'):
         user_details = request.session['user']
         if user_details[1] == 2:
@@ -573,9 +519,9 @@ def reviewer_view_article(request,article_id=None):
             return render(request,"reviewer_view_article.html",details)
                 
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 
 "***************************************************************************************************************"

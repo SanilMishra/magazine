@@ -653,18 +653,6 @@ a.menu-link { display: none; }
   font-weight: 900;
 }
 
-#error {
-  position: absolute;
-  bottom: 0;
-  right: 0; 
-  padding:20px;
-  text-align: center;
-  background-color: rgba(65, 72, 77, 0.85);
-  border-radius: 10px;
-  width: 300px;
-  color: red;
-}
-
 /* View Article Start*/
 
 .article {
