@@ -173,7 +173,7 @@ def view_unassigned_articles(request):
                     a_id=a_id
                     num=int(a_id)
                     send_for_review(num,r_id)
-                    return HttpResponseRedirect("")
+                    return HttpResponseRedirect(request.path_info)
 
             return render(request,"admin_unassigned_articles_list.html",{"articles":[articles,reviewers]})
         else:
@@ -224,7 +224,7 @@ def view_reviewed_articles(request):
                 article_id_list=list(to_be_published.values())[1:]
                 for i in article_id_list:
                     publish(i)
-                return HttpResponseRedirect("")
+                return HttpResponseRedirect(request.path_info)
             # details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'status': article[3]}
             # revert()
             return render(request,"admin_reviewed_articles_list.html",{"articles":articles})
