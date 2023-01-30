@@ -299,10 +299,11 @@ a.menu-link { display: none; }
   }
 }
 
+
 .main-header {
     background-color: #0a1a36;
     height: 80px;
-    position: fixed;
+    position: absolute;
     z-index: 12;
     width: 100%;
     top: 0;
@@ -570,7 +571,6 @@ a.menu-link { display: none; }
 
 
 /* Slider */
-
 .main-banner {
   position: relative;
   max-height: 100%;
