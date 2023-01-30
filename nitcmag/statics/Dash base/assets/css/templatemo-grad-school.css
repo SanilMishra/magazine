@@ -303,7 +303,7 @@ a.menu-link { display: none; }
 .main-header {
     background-color: #0a1a36;
     height: 80px;
-    position: absolute;
+    position: fixed;
     z-index: 12;
     width: 100%;
     top: 0;
