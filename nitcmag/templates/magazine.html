@@ -13,7 +13,7 @@
             <tbody>               
                     {% csrf_token %}
                     {% for article in articles %}
-                    <tr>
+                    <tr style="color: rgb(218, 218, 218);">
                         <td>{{ article.0}}</td>
                         <td><a href="{% url "magazine:magazine_article" article.1 %}">{{ article.2 }}</a></td>
                         <td>{{ article.3 }}</td>

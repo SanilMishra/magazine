@@ -242,7 +242,7 @@ def view_reviewed_articles(request):
         user_details = request.session['user']
         if user_details[1] == 1:
             cursor = connection.cursor()
-            query = "select article_id,title,author,reviewer_id,rating from magazine_article where status=3;"
+            query = "select article_id,title,author,reviewer_id,rating from magazine_article where status=3 order by rating desc;"
             cursor.execute(query)
             fetched_data = cursor.fetchall()
             articles = []
