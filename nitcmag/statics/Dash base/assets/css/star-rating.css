@@ -34,10 +34,10 @@
     padding-right: 0;
 }
 /* Click + hover color */
-input:checked ~ label { color: #f2ff00;  } /* color current and previous stars on checked */
-.reviewable label:hover, .reviewable label:hover ~ label { color: #f2ff00;  } /* color previous stars on hover */
+input:checked ~ label { color: rgb(200, 170, 18);  } /* color current and previous stars on checked #ffd700;*/ 
+.reviewable label:hover, .reviewable label:hover ~ label { color: rgb(200, 170, 18);  } /* color previous stars on hover */
 
 /* Hover highlights */
 .reviewable input:checked + label:hover, .reviewable input:checked ~ label:hover, /* highlight current and previous stars */
 .reviewable input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
-.reviewable label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #bbd222;  } 
+.reviewable label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #ffd700;  } 

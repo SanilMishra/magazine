@@ -7,6 +7,9 @@
     <div class="caption">
       <div class="form">
         <div class="title"><em>Appoint</em> Reviewer</div>
+        <p class="error" style="font-size:18px; color:rgb(211, 50, 50)" text-align="center" id="error">
+          {{error}}
+        </p>
         <form method="POST" class="ahm_form">
           {% csrf_token %}
           <div class="input-container ic1">

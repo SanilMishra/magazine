@@ -49,12 +49,12 @@
                     <td>
                         <form method="POST">
                             {% csrf_token %}
-                            <select name="reviewer{{article.article_id}}" id="reviewer{{article.article_id}}">
+                            <select class="drop-down ic3" name="reviewer{{article.article_id}}" id="reviewer{{article.article_id}}">
                             {% for x in articles.1 %}
-                              <option value="{{x.0}}*{{article.article_id}}">{{x.1}}</option>
+                            <option value="{{x.0}}*{{article.article_id}}">{{x.1}}</option>
                             {% endfor %}
                             </select>
-                            <input type="submit" value="Send for review">
+                            <input type="submit" class="assign-reviewer-submit" value="Send for review">
                             <br><br>
                           </form>
                     </td>

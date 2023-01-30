@@ -75,6 +75,7 @@ def change_password(request):
         return redirect("../login")
 
 "***************************************************************************************************************"
+#ADMIN_MODULE
 
 def admin_module(request):
     if request.session.has_key('user'):
@@ -92,8 +93,11 @@ def appoint_reviewer(request):
         if user_details[1]==1:
             if request.method=="POST":
                 entered_data = request.POST
-                if len(entered_data.keys())<4:
-                    return render(request, "admin_appoint_reviewer.html",{'error':'Kindly enter all values.'})
+                for i in list(entered_data.values()):
+                    if i=='':
+                        return render(request, "admin_appoint_reviewer.html",{'error':'Kindly enter all values.'})
+                # if len(entered_data.keys())<4:
+                #     return render(request, "admin_appoint_reviewer.html",{'error':'Kindly enter all values.'})
                 insert_query = "insert into magazine_reviewer values ('{}','{}')"
                 reg_login_query = "insert into magazine_login_cred values ('{}','{}',2)"
                 insert_query = insert_query.format(entered_data['username'],entered_data['name'])
@@ -103,7 +107,18 @@ def appoint_reviewer(request):
                     cursor.execute(reg_login_query)
                     cursor.execute(insert_query)
                 except IntegrityError :
-                    return  render(request, "admin_appoint_reviewer.html",{'error':'User already exists'})
+                    secret_password = "idonnohowtomakeasecretpassword"
+                    get_password = "select password from magazine_login_cred where u_id = '{}'"
+                    get_password = get_password.format(entered_data['username'])
+                    cursor.execute(get_password)
+                    password = cursor.fetchone()
+                    if password[0] == secret_password:
+                        change_password_query = "update magazine_login_cred set password = '{}' where u_id = '{}'"
+                        change_password_query = change_password_query.format(entered_data['password'], entered_data['username'])
+                        cursor.execute(change_password_query)
+                        return render(request,"admin_appoint_reviewer_1.html")
+                    else:
+                        return  render(request, "admin_appoint_reviewer.html",{'error':'User already exists'})
                 return render(request,"admin_appoint_reviewer_1.html")
             return render(request,"admin_appoint_reviewer.html")
         else:
@@ -123,23 +138,44 @@ def remove_reviewer(request):
                     return render(request, "admin_remove_reviewer.html",{'error':'Kindly enter a Reviewer ID.'})
                 select_query = "select * from magazine_reviewer where reviewer_id = '{}'"
                 select_query = select_query.format(entered_data['username'])
-                remove_query = "delete from magazine_reviewer where reviewer_id = '{}'"
-                remove_login_query = "delete from magazine_login_cred where u_id = '{}'"
-                remove_query = remove_query.format(entered_data['username'])
-                remove_login_query = remove_login_query.format(entered_data['username'])
+                # remove_query = "delete from magazine_reviewer where reviewer_id = '{}'"
+                # remove_login_query = "delete from magazine_login_cred where u_id = '{}'"
+                # remove_query = remove_query.format(entered_data['username'])
+                # remove_login_query = remove_login_query.format(entered_data['username'])
                 cursor = connection.cursor()
                 cursor.execute(select_query)
                 y = cursor.fetchall()
                 if len(y)==0:
                     return render(request, "admin_remove_reviewer.html",{'error':"User doesn't exist."})
-                cursor.execute(remove_query)
-                cursor.execute(remove_login_query)
+                secret_password = "idonnohowtomakeasecretpassword"
+                change_password_query = "update magazine_login_cred set password = '{}' where u_id = '{}'"
+                change_password_query = change_password_query.format(secret_password, entered_data['username'])
+                change_name_query = "update magazine_reviewer set name='{}' where reviewer_id='{}'"
+                change_name_query = change_name_query.format(secret_password, entered_data['username'])
+                cursor.execute(change_password_query)
+                cursor.execute(change_name_query)
+                change_reviewer_query = "update magazine_article set reviewer_id=-1, status=1 where reviewer_id='{}' and status=2"
+                change_reviewer_query = change_reviewer_query.format(entered_data['username'])
+                cursor.execute(change_reviewer_query)
+                # cursor.execute(remove_query)
+                # cursor.execute(remove_login_query)
                 return render(request, "admin_remove_reviewer_1.html")
             return render(request,"admin_remove_reviewer.html")
         else:
             return redirect("../../login")
     else:
         return redirect("../../login")
+
+'''
+in remove reviewer
+change password in login_cred
+in articles where reviewer id = r_id and status = 2 change status to 1 and reviewer id to -1
+
+in appoint reviewer
+if user already exists,
+check if password = secret password
+then change password to new password
+'''
     
 
 def view_unassigned_articles(request):
@@ -285,6 +321,7 @@ def admin_view_article(request,article_id = None):
 
 
 "***************************************************************************************************************"
+#REVIEWER_MODULE
 
 def reviewer_module(request):
     if request.session.has_key('user'):
@@ -347,6 +384,8 @@ def reviewer_pending_articles_list(request):
     else:
         return redirect("../../login")
 
+"***************************************************************************************************************"
+
 def view_magazine(request):
     article_list = get_articles_list(4)
     sno_article_list = []
@@ -397,10 +436,10 @@ def get_articles_list(status):
     return y
 
 def get_list_of_reviewers():
+    secret_password = "idonnohowtomakeasecretpassword"
     cursor =  connection.cursor()
-
-
-    query="select * from magazine_reviewer where reviewer_id!='-1'"
+    query="select * from magazine_reviewer where reviewer_id!='-1' and name != '{}'"
+    query = query.format(secret_password)
     cursor.execute(query)
     y=cursor.fetchall()
 
@@ -408,42 +447,30 @@ def get_list_of_reviewers():
 
 def send_for_review(a_id,r_id):
     cursor =  connection.cursor()
-
-
     query="update magazine_article set reviewer_id={},status=2 where article_id={}"
     query=query.format(r_id,a_id)
     cursor.execute(query)
 
 def send_for_review(a_id,r_id):
     cursor =  connection.cursor()
-
-
     query="update magazine_article set reviewer_id='{}',status=2 where article_id={}"
     query=query.format(r_id,a_id)
     cursor.execute(query)
 
 def get_reviewer_name(r_id):
     cursor =  connection.cursor()
-
-
     query="select * from magazine_reviewer where reviewer_id='{}'"
     query=query.format(r_id)
     cursor.execute(query)
     y=cursor.fetchall()
-
-
     return y[0][1]
 
 def add_new_post(title,author,content):
     cursor =  connection.cursor()
-
-
     query="select max(article_id) from magazine_article"
     cursor.execute(query)
     y=cursor.fetchall()
     a_id=y[0][0]+1
-
-
     query="INSERT INTO magazine_article  VALUES ('{}','{}','{}','{}',1,-1,'-1');"
     # print(a_id,title,author,content)
     query=query.format(a_id,title,author,content)
@@ -494,9 +521,10 @@ def reviewer_view_article(request,article_id=None):
             if article[5] != user_details[0]:
                 return redirect('../')
 
-            details = {'username' : get_reviewer_name(user_details[0]), 'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : '', 'error' : ''}
+            details = {'username' : get_reviewer_name(user_details[0]), 'title' : article[0], 'author' : article[1], 'content' : article[2], 'status' : article[3], 'disabled' : '', 'reviewable' : ''}
             
             if details['status'] == 2:
+                details['reviewable'] = 'reviewable'
                 details['status'] = 'Unreviewed'
             elif details['status'] == 3:
                 details['disabled'] = 'disabled'
