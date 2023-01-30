@@ -22,6 +22,7 @@ urlpatterns = [
     path('reviewer_module/reviewer_reviewed_articles_list/',views.reviewer_reviewed_articles_list,name="reviewer_reviewed_articles_list"),
     path('reviewer_module/reviewer_view_article/<int:article_id>',views.reviewer_view_article,name="reviewer_view_article"),
     path('view_magazine/',views.view_magazine,name="view_magazine"),
+    path('magazine_article/<int:article_id>',views.magazine_article,name="magazine_article"),
     path('create_article/',views.create_article,name="create_article"),
     # path('view_magazine/viewer_article/',views.published_article,name="view_magazine")
     

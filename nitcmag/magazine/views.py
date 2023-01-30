@@ -321,9 +321,9 @@ def reviewer_reviewed_articles_list(request):
                 reviewed_list.append(dict)
             return render(request,"reviewer_reviewed_articles_list.html",{'username' : get_reviewer_name(user_details[0]), 'articles': reviewed_list})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def reviewer_pending_articles_list(request):
     if request.session.has_key('user'):
@@ -343,12 +343,16 @@ def reviewer_pending_articles_list(request):
                 pending_list.append(dict)
             return render(request,"reviewer_pending_articles_list.html",{'username' : get_reviewer_name(user_details[0]), 'articles': pending_list})
         else:
-            return redirect("../login")
+            return redirect("../../login")
     else:
-        return redirect("../login")
+        return redirect("../../login")
 
 def view_magazine(request):
-    return render(request,'magazine.html',{'articles':get_articles_list(4)})
+    article_list = get_articles_list(4)
+    sno_article_list = []
+    for i,article in enumerate(article_list):
+        sno_article_list.append((i+1,article[0],article[1],article[2]))
+    return render(request,'magazine.html',{'articles':sno_article_list})
 
 def create_article(request):
     if request.method=="POST":
@@ -456,14 +460,21 @@ def atoi(stri):
 
 "***************************************************************************************************************"
 
-def published_article(request, article_id):
+def magazine_article(request, article_id = None):
+    if article_id == None:
+        return redirect('../')
     cursor = connection.cursor()
-    query = "select title,author,content,name from article, reviewer where article_id = {} and article.reviewer_id = reviewer.reviewer_id;"
+    query = "select title,author,content,status from magazine_article where article_id = '{}';"
     query = query.format(article_id)
     cursor.execute(query)
-    article = cursor.fetchall()[0]
-    details = {'title' : article[0], 'author' : article[1], 'content' : article[2], 'reviewer' : article[3]}
-    return render(request,"published_article.html",details)
+    article = cursor.fetchall()
+    if len(article) == 0 or article[0][3] != 4:
+        return redirect('../')
+    
+    article = article[0]
+    
+    details = {'title' : article[0], 'author' : article[1], 'content' : article[2]}
+    return render(request,"magazine_article.html",details)
 
 def reviewer_view_article(request,article_id=None):
     if request.session.has_key('user'):

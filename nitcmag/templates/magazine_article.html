@@ -1,0 +1,12 @@
+{% extends 'magazine_dash_base.html' %}
+
+{% block body %}
+<div class = "article">
+    <h1 id = "article-title">{{ title }}</h1>
+    <h5 id = "article-author">by <em>{{ author }}</em></h5>
+    <div class = "article-content-rating">
+        <hr>
+        <p>{{ content }}</p>
+    </div>
+</div>
+{% endblock %}
