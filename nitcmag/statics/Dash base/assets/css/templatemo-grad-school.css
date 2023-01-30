@@ -172,15 +172,6 @@ p {
     line-height: 22px;
 }
 
-.article-list-heading{
-  position: relative;
-  top: 3.25em;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-}
-
-
 .section-heading {
     text-align: center;
     margin-bottom: 70px;
@@ -721,6 +712,52 @@ a.menu-link { display: none; }
 }
 
 /* View Article End */
+
+/* Article List Start */
+
+.article-list-heading{
+  position: relative;
+  top: 1.5em;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.articles-list {
+  width: 80vw;
+  background-color: rgba(62, 78, 105, 0.9);
+  font-size: large;
+  position: relative;
+  margin: 80px auto;
+  border-radius: 1.25em;
+}
+
+.articles-list th {
+  position: sticky;
+  padding: 1em 1em 0.5em;
+  text-align: center;
+}
+
+.articles-list td {
+  padding: 0.4em 1em;
+  text-align: center;
+}
+
+#publish-button {
+  background-color: #25d2f5;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  text-align: center;
+  width: 100%;
+  margin: 0 1rem 1rem;
+}
+
+/*Article List End */
 
 @media screen and (max-width: 1180px) {
 

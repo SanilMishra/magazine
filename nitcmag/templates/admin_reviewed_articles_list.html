@@ -33,11 +33,10 @@
 {% block body %}
     <h1 class="article-list-heading">REVIEWED ARTICLES</h1>
     <form method="POST">
-    <table class="caption" style="background-color: rgba(62, 78, 105, 0.9); font-size: large; border-radius: 5px;">
+    <table class="articles-list">
         <thead>
             <tr style="color: rgb(200, 170, 18);">
-                <th></th>
-                <th>Article ID</th>
+                <th>Publish?</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Reviewer ID</th>
@@ -50,7 +49,6 @@
                 {% for article in articles %}
                 <tr style="color: rgb(218, 218, 218);">
                     <td><input type="checkbox" name=article_id{{article.article_id}} value={{article.article_id}}></td>
-                    <td>{{article.article_id }}</td>
                     <td><a href="{% url "magazine:admin_view_article" article.article_id %}">{{article.title }}</a></td>
                     <td>{{ article.author }}</td>
                     <td>{{ article.reviewer_id }}</td>
@@ -70,7 +68,7 @@
                     </td>
                 </tr>
                 {% endfor %}
-                <tr><td><input type="submit" value="Publish"></td></tr>
+                <tr><td><input type="submit" id="publish-button" value="Publish."></td></tr>
                     
 
             
